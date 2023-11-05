@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <title>valyamasterov</title>
+</head>
+<body>
+
+<div id="mainContainer">
+    <section id="navbar">
+        <div>
+            <a href="">valyamasterov.com</a>
+        </div>
+        <div>
+            <button onclick="showProjects()">Projects & Objects</button> 
+            <button onclick="showContacts()">Contacts</button>
+        </div>
+    </section>
+    <section id="projects">
+        <div id="projectContainer">
+            <h2>Catasound</h2>
+            <a href="https://catasound.com"><img src="images/catasound-preview.png"></a>
+            <p>Catasound provides a virtual record-digging experience, allowing you to explore community-created collections, discover new sounds, and organise your personal digital music library.</p>
+            <a href="https://catasound.com">https://catasound.com →</a>
+        </div>
+    </section>
+    <section id="about">
+        test
+    </section>
+    <section id="contacts">
+        <div><img src="images/valya.jpeg"></div>
+        <div>
+                <h2>Instagram</h2>
+                <a href="https://www.instagram.com/valyamasterov/">@valyamasterov</a>
+            <p>
+                <h2>Email</h2>
+                <a href="mailto:valyamasterov@gmail.com">valyamasterov@gmail.com</a>
+            </p>
+        </div>
+    </section>
+</div>
+    
+<script>
+    const showAbout = () => {
+        document.getElementById('projects').style.display = "none";
+        document.getElementById('contacts').style.display = "none";
+        document.getElementById('about').style.display = "flex";
+        
+    }
+    const showContacts = () => {
+        document.getElementById('projects').style.display = "none";
+        document.getElementById('contacts').style.display = "flex";
+        document.getElementById('about').style.display = "none";
+    }
+    const showProjects = () => {
+        document.getElementById('projects').style.display = "grid";
+        document.getElementById('contacts').style.display = "none";
+        document.getElementById('about').style.display = "none";
+    }
+</script>
+
+</body>
+</html>
