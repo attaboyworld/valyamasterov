@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Distance Calculator with Auto-detect Location and Pin Selection</title>
+    <!-- Include Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Distance Calculator with Auto-detect Location and Pin Selection</h1>
+    <div>
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" placeholder="Click on the map to select a destination">
+    </div>
+    <div>
+        <button id="calculate">Calculate Distance and Time</button>
+    </div>
+    <div id="result">
+        <strong>Your Location:</strong> <span id="userLocation"></span><br>
+        <strong>Selected Location:</strong> <span id="selectedLocation"></span><br>
+        <strong>Driving Distance:</strong> <span id="drivingDistance"></span><br>
+        <strong>Travel Time by Car:</strong> <span id="travelTime"></span> <!-- Added missing element -->
+    </div>
+    <div id="map" style="height: 400px;"></div>
+
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Fallback to IP-based location if geolocation is not available
+        var useGeolocation = true;
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var userLatitude = position.coords.latitude;
+            var userLongitude = position.coords.longitude;
+            var userCoordinates = [userLatitude, userLongitude];
+
+            if (!isNaN(userCoordinates[0]) && !isNaN(userCoordinates[1])) {
+                document.getElementById('userLocation').textContent = `Latitude: ${userCoordinates[0].toFixed(6)}, Longitude: ${userCoordinates[1].toFixed(6)}`;
+                L.marker(userCoordinates).addTo(map);
+                map.setView(userCoordinates, 12);
+            } else {
+                useGeolocation = false;
+                document.getElementById('userLocation').textContent = 'Unable to determine your location.';
+            }
+        }, function(error) {
+            useGeolocation = false;
+            document.getElementById('userLocation').textContent = 'Unable to determine your location.';
+        });
+
+        var selectedLocationMarker = null;
+        var route = null;
+
+        map.on('click', function(e) {
+            if (selectedLocationMarker) {
+                map.removeLayer(selectedLocationMarker);
+            }
+            selectedLocationMarker = L.marker(e.latlng).addTo(map);
+            document.getElementById('selectedLocation').textContent = `Latitude: ${e.latlng.lat.toFixed(6)}, Longitude: ${e.latlng.lng.toFixed(6)}`;
+        });
+
+        document.getElementById('calculate').addEventListener('click', function() {
+            calculateDistanceAndTime();
+        });
+
+        function calculateDistanceAndTime() {
+            if (!selectedLocationMarker) {
+                alert('Please select a destination location on the map.');
+                return;
+            }
+
+            var destinationCoordinates = selectedLocationMarker.getLatLng();
+
+            if (useGeolocation) {
+                var userCoordinates = [parseFloat(document.getElementById('userLocation').textContent.split(':')[3]), parseFloat(document.getElementById('userLocation').textContent.split(':')[1])];
+
+                // Check if user coordinates are valid
+                if (isNaN(userCoordinates[0]) || isNaN(userCoordinates[1])) {
+                    document.getElementById('drivingDistance').textContent = 'Unable to determine your location.';
+                    document.getElementById('travelTime').textContent = 'Unable to calculate travel time.';
+                    return;
+                }
+
+                var apiKey = '5b3ce3597851110001cf6248ab4b955a19414de89c025e8d8ab849fa'; // Replace with your actual API key
+
+                // Request to OpenRouteService for car route
+                var url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${userCoordinates[1]},${userCoordinates[0]}&end=${destinationCoordinates.lat},${destinationCoordinates.lng}`;
+
+                fetch(url)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        if (data.features && data.features.length > 0) {
+                            var travelTimeMinutes = data.features[0].properties.segments[0].duration / 60;
+                            document.getElementById('travelTime').textContent = travelTimeMinutes.toFixed(2) + ' minutes';
+
+                            // Draw the route on the map
+                            if (route) {
+                                map.removeLayer(route);
+                            }
+                            route = L.geoJSON(data).addTo(map);
+                        } else {
+                            document.getElementById('travelTime').textContent = 'Unable to calculate travel time.';
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                        document.getElementById('travelTime').textContent = 'Unable to calculate travel time.';
+                    });
+            } else {
+                document.getElementById('drivingDistance').textContent = 'Location unavailable.';
+                document.getElementById('travelTime').textContent = 'Location unavailable.';
+            }
+        }
+    </script>
+</body>
+</html>
