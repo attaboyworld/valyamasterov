@@ -66,8 +66,9 @@
             var targetLocation = [48.8582599, 2.2945006358633115]; // Replace with valid target coordinates
 
             // Create the request body with coordinates
-            var requestBody = '{"coordinates":' + JSON.stringify([userLocation, targetLocation]) + ',"format":"geojson"}';
+            var requestBody = '{"coordinates":' + JSON.stringify([userLocation, targetLocation]) + '}';
 
+            console.log(requestBody);
             request.send(requestBody);
         }
 
