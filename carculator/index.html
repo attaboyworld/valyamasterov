@@ -35,42 +35,41 @@
             return L.marker(location).addTo(map).bindPopup(label).openPopup();
         }
 
-// Function to draw a route on the map
-// Function to draw a route on the map
-function drawRoute(userLocation, targetLocation) {
-    if (routeLayer) {
-        map.removeLayer(routeLayer);
-    }
+        // Function to draw a route on the map
+        function drawRoute(userLocation, targetLocation) {
+            if (routeLayer) {
+                map.removeLayer(routeLayer);
+            }
 
-    var routingAPI = 'https://api.openrouteservice.org/v2/directions/driving-car';
-    var apiKey = '5b3ce3597851110001cf6248ab4b955a19414de89c025e8d8ab849fa'; // Replace with your API key
+            var routingAPI = 'https://api.openrouteservice.org/v2/directions/driving-car';
+            var apiKey = '5b3ce3597851110001cf6248ab4b955a19414de89c025e8d8ab849fa'; // Replace with your API key
 
-    var request = new XMLHttpRequest();
+            var request = new XMLHttpRequest();
 
-    request.open('POST', routingAPI);
-    request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('Authorization', apiKey);
+            request.open('POST', routingAPI);
+            request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.setRequestHeader('Authorization', apiKey);
 
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            var data = JSON.parse(request.responseText);
-            var route = data.features[0].geometry.coordinates;
-            routeLayer = L.polyline(route, { color: 'blue' }).addTo(map);
-        } else {
-            console.error('Error: ' + request.status);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    var data = JSON.parse(request.responseText);
+                    var route = data.features[0].geometry.coordinates;
+                    routeLayer = L.polyline(route, { color: 'blue' }).addTo(map);
+                } else {
+                    console.error('Error: ' + request.status);
+                }
+            };
+
+            // Assign coordinates directly
+            var userLocation = [48.8546225, 2.3561173]; // Replace with valid user coordinates
+            var targetLocation = [48.8582599, 2.2945006358633115]; // Replace with valid target coordinates
+
+            // Create the request body with coordinates
+            var requestBody = '{"coordinates":' + JSON.stringify([userLocation, targetLocation]) + ',"format":"geojson"}';
+
+            request.send(requestBody);
         }
-    };
-
-    var requestBody = JSON.stringify({
-        coordinates: [userLocation, targetLocation],
-        format: 'geojson'
-    });
-
-    request.send(requestBody);
-}
-
-// ...
 
         // Handle the search button click
         document.getElementById('searchButton').addEventListener('click', function () {
@@ -81,7 +80,7 @@ function drawRoute(userLocation, targetLocation) {
             fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + targetLocation)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.length > 0) {
+                    if (Array.isArray(data) && data.length > 0) {
                         var result = data[0];
                         var targetCoordinates = [result.lat, result.lon];
 
@@ -108,7 +107,7 @@ function drawRoute(userLocation, targetLocation) {
                 map.removeLayer(userLocationMarker);
             }
             userLocationMarker = addMarker(userLocation, 'Your Location');
-            
+
             if (!targetLocationMarker) {
                 map.setView(userLocation, 13);
             } else {
