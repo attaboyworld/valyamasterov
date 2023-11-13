@@ -1,0 +1,118 @@
+body {
+    padding: 0px 1%;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+p {
+    font-size: 14px;
+}
+
+input[type="text"], input[type="number"] {
+    border-radius: 0px;
+    border: 1px black solid;
+    padding: 2px 7px;
+    font-family: 'DM Sans', sans-serif;
+    width: 112px;
+}
+
+button {
+    min-width: 98px;
+    min-height: 28px;
+    border-radius: 28px;
+    border: 1px black solid;
+    padding: 2px 14px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.routeDivider{
+    border-left: 1px dashed black;
+    min-height: 21px;
+    margin-left: 4px;
+}
+
+#routePlannerContainer {
+    margin-top: 21px;
+}
+
+#stepForm {
+    border: 1px solid black;
+    border-radius: 28px;
+    padding: 0px 14px 28px 14px;
+}
+
+#stepForm input {
+    margin-bottom: 14px;
+}
+
+#stepForm h2 {
+    margin: 21px 0px 14px 0px;
+}
+
+#route {
+    margin: 21px 0px;
+}
+
+#result {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#result table {
+    width: 55%;
+}
+
+#result button {
+    margin-top: 21px;
+    width: 100%;
+    height: 42px;
+}
+
+#resultContainer {
+    width: 100%;
+}
+
+.resultOutputCard {
+    display: flex;
+    width: auto;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 28px;
+    padding: 21px 21px;
+    margin-top: 21px;
+}
+
+.resultOutputCard img{
+    width: 30%;
+    height: auto;
+}
+
+.resultOutputCard p{
+    width: 50%;
+    height: auto;
+    line-height: 28px;
+}
+
+.stepElement {
+    background-color: #F6F6F6;
+    padding: 14px 21px;
+    border-radius: 28px;
+    margin-bottom: 14px;
+}
+
+table {
+    text-align: left;
+}
+
+td {
+    padding: 7px 7px 7px 0px;
+}
+

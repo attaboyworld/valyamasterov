@@ -1,120 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>OpenStreetMap with Route Directions</title>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <title>Carculator Demo</title>
+
+    <script src="cardata.json"></script>
+    <script src="carculator-logic.js" defer></script>
+
 </head>
 <body>
-    <div>
-        <label for="targetLocation">Select a target location:</label>
-        <input type="text" id="targetLocation">
-        <button id="searchButton">Search</button>
-    </div>
-    <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <h1>Carculator Demo</h1>
+
+    <section>
+        <div id="stepForm">
+            <div>
+            <h2>Route details</h2>
+                <label for="origin">Start:</label>
+                <input type="text" id="origin" placeholder="Starting address">              
+                <span> or </span><button onclick="getUserLocation()">Current location</button>
+                <br><label for="destination">End:</label>
+                <input type="text" id="destination" placeholder="Destination address">
+                <br><button onclick="calculateDistance()">Add</button>
+            </div>
+            <h2>or add a stop</h2>
+            <label for="stop">Waiting time (minutes):</label>
+            <input type="number" id="stop" placeholder="Enter waiting time">
+            <br><button onclick="addWaitingTime()">Add</button>
+        </div>  
+    </section>
+    
+    <section>
+        <div id="routePlannerContainer">
+            <h2>Your trip details:</h2>
+             <div id="route">
+             </div>
+             <div id="result">
+                <table>
+                    <tr>
+                        <td>Total distance (km):</td>
+                        <td><span id="totalDistance">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>Total drive time (min):</td>
+                        <td><span id="totalTime">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>Total wait time (min):</td>
+                        <td><span id="totalWait">0</span></td>
+                    </tr>
+                </table>
+
+                <button onclick="loadCarData()">Show deals</button>
+
+             </div>
+        </div>
+    </section>
+
+    <section>
+        <div id="resultContainer">
+
+        </div>
+    </section>
+
     <script>
-        var map = L.map('map');
-        var userLocationMarker = null;
-        var targetLocationMarker = null;
-        var routeLayer = null;
+        function initAutocomplete() {
+            var originAutocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('origin'), { types: ['geocode'] }
+            );
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Function to add a marker at the specified location
-        function addMarker(location, label) {
-            return L.marker(location).addTo(map).bindPopup(label).openPopup();
+            var destinationAutocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('destination'), { types: ['geocode'] }
+            );
         }
 
-        // Function to draw a route on the map
-        function drawRoute(userLocation, targetLocation) {
-            if (routeLayer) {
-                map.removeLayer(routeLayer);
-            }
-
-            var routingAPI = 'https://api.openrouteservice.org/v2/directions/driving-car';
-            var apiKey = '5b3ce3597851110001cf6248ab4b955a19414de89c025e8d8ab849fa'; // Replace with your API key
-
-            var request = new XMLHttpRequest();
-
-            request.open('POST', routingAPI);
-            request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Authorization', apiKey);
-
-            request.onload = function() {
-                if (request.status >= 200 && request.status < 400) {
-                    var data = JSON.parse(request.responseText);
-                    var route = data.features[0].geometry.coordinates;
-                    routeLayer = L.polyline(route, { color: 'blue' }).addTo(map);
-                } else {
-                    console.error('Error: ' + request.status);
-                }
-            };
-
-            // Assign coordinates directly
-            var userLocation = [48.8546225, 2.3561173]; // Replace with valid user coordinates
-            var targetLocation = [48.8582599, 2.2945006358633115]; // Replace with valid target coordinates
-
-            // Create the request body with coordinates
-            var requestBody = '{"coordinates":' + JSON.stringify([userLocation, targetLocation]) + '}';
-
-            console.log(requestBody);
-            request.send(requestBody);
-        }
-
-        // Handle the search button click
-        document.getElementById('searchButton').addEventListener('click', function () {
-            var targetLocationInput = document.getElementById('targetLocation');
-            var targetLocation = targetLocationInput.value;
-
-            // Use Nominatim for geocoding
-            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + targetLocation)
-                .then(response => response.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        var result = data[0];
-                        var targetCoordinates = [result.lat, result.lon];
-
-                        if (targetLocationMarker) {
-                            map.removeLayer(targetLocationMarker);
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var geocoder = new google.maps.Geocoder();
+                    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    
+                    geocoder.geocode({ 'location': latLng }, function (results, status) {
+                        if (status === 'OK') {
+                            document.getElementById('origin').value = results[0].formatted_address;
+                        } else {
+                            console.error('Geocoder failed due to: ' + status);
                         }
-                        targetLocationMarker = addMarker(targetCoordinates, result.display_name);
-
-                        if (userLocationMarker) {
-                            drawRoute(userLocationMarker.getLatLng(), targetLocationMarker.getLatLng());
-                        }
-                    } else {
-                        alert('Location not found.');
-                    }
-                })
-                .catch(error => console.error(error));
-        });
-
-        // Get the user's current location and add a marker to the map
-        navigator.geolocation.getCurrentPosition(function (location) {
-            var userLocation = [location.coords.latitude, location.coords.longitude];
-
-            if (userLocationMarker) {
-                map.removeLayer(userLocationMarker);
-            }
-            userLocationMarker = addMarker(userLocation, 'Your Location');
-
-            if (!targetLocationMarker) {
-                map.setView(userLocation, 13);
+                    });
+                }, function (error) {
+                    console.error('Error getting user location: ' + error.message);
+                });
             } else {
-                drawRoute(userLocation, targetLocationMarker.getLatLng());
+                alert('Geolocation is not supported by this browser.');
             }
-        });
+        }
+
+        function addWaitingTime() {
+            var waitTime = parseInt(document.getElementById('stop').value);
+            if (waitTime > 0) {
+                var totalWaitTime = parseInt(document.getElementById('totalWait').innerHTML);
+                document.getElementById('totalWait').innerHTML = totalWaitTime + waitTime;
+                var stepElement = document.createElement("div");
+                stepElement.classList.add('stepElement')
+                stepElement.innerHTML = 'Wait for ' + waitTime + ' minutes';
+                document.getElementById('route').appendChild(stepElement);
+                document.getElementById('stop').value = '';
+            }
+
+        }
+
+        function calculateDistance() {
+            var origin = document.getElementById('origin').value;
+            var destination = document.getElementById('destination').value;
+
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+                {
+                    origins: [origin],
+                    destinations: [destination],
+                    travelMode: 'DRIVING',
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                    avoidHighways: false,
+                    avoidTolls: false,
+                },
+                function (response, status) {
+                    if (status == 'OK') {
+                        var distance = response.rows[0].elements[0].distance.text;
+                        var distance = parseFloat(distance.replace(/[^\d.]/g, ''));
+                        var duration = response.rows[0].elements[0].duration.text;
+                        var duration = parseFloat(duration.replace(/[^\d.]/g, ''));
+                        var stepElement = document.createElement("div");
+                        stepElement.classList.add('stepElement')
+                        stepElement.innerHTML = 'from ' + '<b>' + document.getElementById('origin').value + '</b>' + ' to ' + '<b>' + document.getElementById('destination').value + '</b>' + '<br><br>Distance: ' + distance + ' km, ' + 'Duration: ' + duration + ' minutes';
+                        document.getElementById('route').appendChild(stepElement);
+
+                        var totalDriveTime = parseFloat(document.getElementById('totalTime').innerHTML, 2);
+                        document.getElementById('totalTime').innerHTML = totalDriveTime + duration;
+
+                        var totalDistance = parseFloat(document.getElementById('totalDistance').innerHTML, 2);
+                        document.getElementById('totalDistance').innerHTML = totalDistance + distance;
+
+                        var origin = document.getElementById('origin').value = document.getElementById('destination').value;
+                        var destination = document.getElementById('destination').value = '';
+                        document.getElementById('stop').value = '';
+
+                    } else {
+                        // document.getElementById('result').innerHTML = 'Error: ' + status;
+                    }
+                }
+            );
+        }
     </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZZXEpOD9AUtM9k2f3u9ZPn-BzBXCFAvE&libraries=places&callback=initAutocomplete" async defer></script>
 </body>
 </html>

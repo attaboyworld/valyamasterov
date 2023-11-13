@@ -5,7 +5,7 @@ var ridePrice;
 loadCarData = () => {
 
     // clearing result card output
-    let outputParent = document.getElementById("result-container");
+    let outputParent = document.getElementById("resultContainer");
     while (outputParent.firstChild) {
         outputParent.removeChild(outputParent.firstChild);
     }
@@ -14,9 +14,9 @@ loadCarData = () => {
     sortedCarPrices = [];
 
     // values from calculator form inputs
-    var distance = parseInt(document.getElementById("distance").value);
-    var time = parseFloat(document.getElementById("time").value);
-    var waitTime = parseFloat(document.getElementById("waittime").value);
+    var distance = parseFloat(document.getElementById("totalDistance").innerHTML);
+    var time = parseFloat(document.getElementById("totalTime").innerHTML);
+    var waitTime = parseFloat(document.getElementById("totalWait").innerHTML);
 
     carData.forEach(element => {
         
@@ -60,26 +60,65 @@ loadCarData = () => {
         })
 
         // Bolt Drive Price Calculations
+
         if (company === "Bolt Drive") {
-            if (time < 60 && recordExists === false) { // if ride time is less than 1h
-                ridePrice = (km1 * distance) + (min1 * time) + (waitTime1MinDayTime * waitTime);
-                ridePrice = Math.round(ridePrice * 100) / 100;
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-                calculatedPrices.push([ridePrice, company, carModel]);
-            } else if (time > 60 && time < 1440 && recordExists === false){ // if ride time is greater than 1h
-                ridePrice = ((time % 60) * min1) + (Math.floor(time / 60) * h1) + (km1 * distance) + (waitTime1MinDayTime * waitTime);
-                ridePrice = Math.round(ridePrice * 100) / 100;
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-                calculatedPrices.push([ridePrice, company, carModel]);
+            if (recordExists === false) {
+                if (min1 * time < h1) { // check if counting by minutes is cheaper than 1h pack
+                    ridePrice = (km1 * distance) + (min1 * time) + (waitTime1MinDayTime * waitTime);
+                    ridePrice = Math.round(ridePrice * 100) / 100; 
+                    if (ridePrice < minimumTripPrice) {
+                        ridePrice = minimumTripPrice;
+                    }
+                    calculatedPrices.push([ridePrice, company, carModel]);
+                } else if (min1 * time >= h1 && min1 * time < h1 * 2) {
+                    if (time <= 60) {
+                        ridePrice = (km1 * distance) + h1 + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100; 
+                        calculatedPrices.push([ridePrice, company, carModel]);
+                    } else {
+                        ridePrice = (km1 * distance) + h1 + (min1 * (time - 60)) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100;  
+                        calculatedPrices.push([ridePrice, company, carModel]);  
+                    }
+                } else if (min1 * time >= h1 * 2 && min1 * time < h1 * 3) {
+                    if (time <= 120) {
+                        ridePrice = (km1 * distance) + (h1 * 2) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100; 
+                        calculatedPrices.push([ridePrice, company, carModel]);
+                    } else {
+                        ridePrice = (km1 * distance) + (h1 * 2) + (min1 * (time - 120)) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100; 
+                        calculatedPrices.push([ridePrice, company, carModel]);   
+                    }
+                } else if (min1 * time >= h1 * 3 && min1 * time < day1) {
+                    if (time <= 180) {
+                        ridePrice = (km1 * distance) + (h1 * 3) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100;
+                        calculatedPrices.push([ridePrice, company, carModel]); 
+                    } else {
+                        ridePrice = (km1 * distance) + (h1 * 3) + (min1 * (time - 180)) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100;
+                        calculatedPrices.push([ridePrice, company, carModel]);    
+                    }
+                } else if (min1 * time >= day1) {
+                    if (time <= 1440) {
+                        ridePrice = (km1 * distance) + day1 + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100;
+                        calculatedPrices.push([ridePrice, company, carModel]); 
+                    } else {
+                        ridePrice = (km1 * distance) + day1 + (min1 * (time - 1440)) + (waitTime1MinDayTime * waitTime);
+                        ridePrice = Math.round(ridePrice * 100) / 100;
+                        calculatedPrices.push([ridePrice, company, carModel]);    
+                    }
+                } 
+            }
+            if (ridePrice < minimumTripPrice) {
+                ridePrice = minimumTripPrice;
             }
         }
 
         // Carguru Price Calculations
-        if (company === "Carguru") {
+        /*if (company === "Carguru") {
             if (time < 60 && recordExists === false) { // if ride time is less than 1h
                 ridePrice = (km1 * distance) + (min1 * time) + (waitTime1MinDayTime * waitTime);
                 ridePrice = Math.round(ridePrice * 100) / 100;
@@ -102,7 +141,7 @@ loadCarData = () => {
                     }
                     calculatedPrices.push([ridePrice, company, carModel]);
             } 
-        }
+        }*/
     });
 
     sortedCarPrices = calculatedPrices.sort((a, b) => a[0] - b[0]);
@@ -138,13 +177,13 @@ loadCarData = () => {
                 case "Nissan Juke": carImageDisplay = "<img src=" + "images/cars/nissan-juke.png" + ">"; break;
         }
         const resultCard = document.createElement("div");
-        resultCard.setAttribute("class", "result-output-card");
-        resultCard.innerHTML = carImageDisplay + '<p> EUR ' + sortedCarPrices[i][0] + ' | ' + sortedCarPrices[i][1] + ' | ' + sortedCarPrices[i][2] + '</p>'
-        const resultContainer = document.getElementById('result-container');
+        resultCard.setAttribute("class", "resultOutputCard");
+        resultCard.innerHTML = carImageDisplay + '<p>' + sortedCarPrices[i][1] + '<br>' + sortedCarPrices[i][2] + '<br> EUR ' + sortedCarPrices[i][0] + '</p>';
+        const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);
     }
 
-    document.getElementById("result-container").scrollIntoView();
+    document.getElementById("resultContainer").scrollIntoView();
 
 }
 
