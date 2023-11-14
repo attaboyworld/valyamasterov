@@ -63,7 +63,7 @@ loadCarData = () => {
 
         if (company === "Bolt Drive") {
             if (recordExists === false) {
-                if (min1 * time < h1) { // check if counting by minutes is cheaper than 1h pack
+                if (min1 * time < h1) {
                     ridePrice = (km1 * distance) + (min1 * time) + (waitTime1MinDayTime * waitTime);
                     ridePrice = Math.round(ridePrice * 100) / 100; 
                     if (ridePrice < minimumTripPrice) {
