@@ -19,7 +19,8 @@
             <a href="">valyamasterov.com</a>
         </div>
         <div>
-            <button onclick="showProjects()">Projects & Objects</button> 
+            <button onclick="showProjects()">Projects & Objects</button>
+            <button onclick="showSound()">Sound</button> 
             <button onclick="showContacts()">Contacts</button>
         </div>
     </section>
@@ -33,6 +34,9 @@
     </section>
     <section id="about">
         test
+    </section>
+    <section id="sound">
+        <iframe width="100%" height="60" src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=%2Fvalyamasterov%2Fnovember-19th-2023%2F" frameborder="0" ></iframe>
     </section>
     <section id="contacts">
         <div><img src="images/valya.jpeg"></div>
@@ -51,18 +55,27 @@
     const showAbout = () => {
         document.getElementById('projects').style.display = "none";
         document.getElementById('contacts').style.display = "none";
+        document.getElementById('sound').style.display = "none";
         document.getElementById('about').style.display = "flex";
         
     }
     const showContacts = () => {
         document.getElementById('projects').style.display = "none";
+        document.getElementById('sound').style.display = "none";
         document.getElementById('contacts').style.display = "flex";
         document.getElementById('about').style.display = "none";
     }
     const showProjects = () => {
         document.getElementById('projects').style.display = "grid";
+        document.getElementById('sound').style.display = "none";
         document.getElementById('contacts').style.display = "none";
         document.getElementById('about').style.display = "none";
+    }
+    const showSound = () => {
+        document.getElementById('projects').style.display = "none";
+        document.getElementById('contacts').style.display = "none";
+        document.getElementById('about').style.display = "none";
+        document.getElementById('sound').style.display = "flex";
     }
 </script>
 

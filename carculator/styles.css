@@ -1,7 +1,3 @@
-:root {
-    color-scheme: light only;
-  }
-
 body {
     padding: 0px 1%;
     font-size: 14px;
@@ -20,9 +16,10 @@ p {
 input[type="text"], input[type="number"] {
     border-radius: 0px;
     border: 1px black solid;
-    padding: 2px 7px;
     font-family: 'DM Sans', sans-serif;
-    width: 112px;
+    background-color: #F6F6F6;
+    padding: 14px 21px;
+    border-radius: 28px;
 }
 
 button {
@@ -34,13 +31,10 @@ button {
     font-family: 'DM Sans', sans-serif;
 }
 
-.routeDivider{
-    border-left: 1px dashed black;
-    min-height: 21px;
-    margin-left: 4px;
-}
-
 #routePlannerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin-top: 21px;
 }
 
@@ -59,7 +53,7 @@ button {
 }
 
 #route {
-    margin: 21px 0px;
+    margin: 14px 0px;
 }
 
 #result {
@@ -109,7 +103,18 @@ button {
     background-color: #F6F6F6;
     padding: 14px 21px;
     border-radius: 28px;
+}
+
+.stepInput {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 14px;
+}
+
+.stepInput input{
+    width: 80%;
 }
 
 table {
@@ -120,3 +125,9 @@ td {
     padding: 7px 7px 7px 0px;
 }
 
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: black;
+}
