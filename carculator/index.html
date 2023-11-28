@@ -25,52 +25,51 @@
     <section>
         <div id="routePlannerContainer">
             <h2>Your trip details:</h2>
+            <div id="time">
+                <span id="leavingTime">Leaving: <b>now</b></span>
+                <span id='editTime'><u>(edit)</u></span></u>
+                <input type='datetime-local' id='datetimepicker'>
+            </div>
              <div id="route">
              </div>
              <div class="stepInput">
                 <span class="dot"></span>
                 <input type="text" id="origin" placeholder="Starting address">
+                <button onclick="getUserLocation()" id="getCurrent">Current location</a>
             </div>    
+            <span class="line"></span>
             <div class="stepInput"> 
                 <span class="dot"></span>       
                 <input type="text" id="destination" placeholder="Destination address">
+                <button onclick="calculateDistance()">Add</button>
              </div>
-             <br><button onclick="calculateDistance()">Add</button>
-        </div>
-
-             <div id="result">
-                <table>
-                    <tr>
-                        <td>Total distance (km):</td>
-                        <td><span id="totalDistance">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>Total drive time (min):</td>
-                        <td><span id="totalTime">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>Total wait time (min):</td>
-                        <td><span id="totalWait">0</span></td>
-                    </tr>
-                </table>
+             <div class="stepInput" id="stopInput"> 
+                <p>or add a stop:</p>
+                <input type="number" id="stop" placeholder="Enter waiting time">
+                <button onclick="addWaitingTime()">Add</button>
              </div>
         </div>
-    </section>
 
-    <span> or </span><button onclick="getUserLocation()">Current location</button>
+        <div id="result">
+            <table>
+                <tr>
+                    <td>Distance (Km)</td>
+                    <td>Drive time (Minutes)</td>
+                    <td>Wait time (Minutes)</td>
+                </tr>
+                <tr>
+                    <td><span id="totalDistance">0</span></td>
+                    <td><span id="totalTime">0</span></td>
+                    <td><span id="totalWait">0</span></td>
+                </tr>
+            </table>
 
+            <button onclick="loadCarData()">Show deals</button>
 
-    <section>
-        <div id="stepForm">
+        </div>
 
-            <h2>or add a stop</h2>
-            <label for="stop">Waiting time (minutes):</label>
-            <input type="number" id="stop" placeholder="Enter waiting time">
-            <br><button onclick="addWaitingTime()">Add</button>
-        </div>  
-    </section>
+</section>
 
-    <button onclick="loadCarData()">Show deals</button>
 
 
     <section>
@@ -114,11 +113,14 @@
         function addWaitingTime() {
             var waitTime = parseInt(document.getElementById('stop').value);
             if (waitTime > 0) {
+                var lineElement = document.createElement("span");
+                lineElement.classList.add('line')
+                document.getElementById('route').appendChild(lineElement);
                 var totalWaitTime = parseInt(document.getElementById('totalWait').innerHTML);
                 document.getElementById('totalWait').innerHTML = totalWaitTime + waitTime;
                 var stepElement = document.createElement("div");
                 stepElement.classList.add('stepElement')
-                stepElement.innerHTML = 'Wait for ' + waitTime + ' minutes';
+                stepElement.innerHTML = "<span class='dot'></span>" + 'Wait for ' + waitTime + ' minutes';
                 document.getElementById('route').appendChild(stepElement);
                 document.getElementById('stop').value = '';
             }
@@ -146,20 +148,31 @@
                         var duration = response.rows[0].elements[0].duration.text;
                         var duration = parseFloat(duration.replace(/[^\d.]/g, ''));
 
-                        var stepElement = document.createElement("div");
-                        stepElement.classList.add('stepElement')
-                        stepElement.innerHTML = document.getElementById('origin').value;
-                        document.getElementById('route').appendChild(stepElement);
+                        if (document.getElementById('origin').style.display !== "none") {
+                            var stepElement = document.createElement("div");
+                            stepElement.classList.add('stepElement')
+                            stepElement.innerHTML = "<span class='dot'></span>" + document.getElementById('origin').value;
+                            document.getElementById('route').appendChild(stepElement);
+                        }
 
-                        var stepElement = document.createElement("div");
+                        var lineElement = document.createElement("span");
+                        lineElement.classList.add('line')
+                        document.getElementById('route').appendChild(lineElement);
+
+                        /* var stepElement = document.createElement("div");
                         stepElement.classList.add('stepTimeAndDistance');
                         stepElement.innerHTML = "Duration: " + duration + "min | " + "Distance: " + distance + "min";
                         document.getElementById('route').appendChild(stepElement);
+                        */
 
                         var stepElement = document.createElement("div");
                         stepElement.classList.add('stepElement')
-                        stepElement.innerHTML = document.getElementById('destination').value ;
+                        stepElement.innerHTML = "<span class='dot'></span>" + document.getElementById('destination').value;
                         document.getElementById('route').appendChild(stepElement);
+
+                        var lineElement = document.createElement("span");
+                        lineElement.classList.add('line');
+                        document.getElementById('route').appendChild(lineElement);
 
                         var totalDriveTime = parseFloat(document.getElementById('totalTime').innerHTML, 2);
                         document.getElementById('totalTime').innerHTML = totalDriveTime + duration;
@@ -169,8 +182,15 @@
 
                         document.getElementById('origin').value = document.getElementById('destination').value;
                         document.getElementById('origin').style.display = "none";
+                        document.getElementById('getCurrent').style.display = "none";
                         document.getElementById('destination').value = '';
                         document.getElementById('stop').value = '';
+                        document.getElementById('stopInput').style.display = "flex";
+
+                        var dotAmount = document.getElementsByClassName("dot").length;
+                        document.getElementsByClassName('dot')[dotAmount - 2].style.display = "none";
+                        var lineAmount = document.getElementsByClassName("line").length;
+                        document.getElementsByClassName('line')[lineAmount - 2].style.display = "none";
 
                     } else {
                         // document.getElementById('result').innerHTML = 'Error: ' + status;
@@ -178,6 +198,34 @@
                 }
             );
         }
+    </script>
+
+    <script>
+        var today = new Date();
+        var currentDate = today.getDate() + "/" + today.getMonth();
+        var currentHours = today.getHours();
+        var currentMinutes = ("0" + today.getMinutes()).slice(-2);
+        console.log(currentHours);
+
+        const editTime = document.getElementById("editTime");
+        const dateTimePicker = document.getElementById('datetimepicker');
+
+        editTime.addEventListener("click", function(){
+            document.getElementById("leavingTime").innerHTML = "Leaving: ";
+            editTime.style.display = "none";
+            document.getElementById("datetimepicker").style.display = "inline-block";
+        });
+
+        dateTimePicker.addEventListener('change', function() {
+        // Get the selected date/time from the input field
+            const selectedDateTime = dateTimePicker.value;
+      
+        // Extract the hour part from the selected date/time
+            const selectedDate = new Date(selectedDateTime);
+            currentHours = selectedDate.getHours();
+            console.log(currentHours);
+        });
+
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZZXEpOD9AUtM9k2f3u9ZPn-BzBXCFAvE&libraries=places&callback=initAutocomplete" async defer></script>
