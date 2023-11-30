@@ -83,6 +83,7 @@ loadCarData = () => {
             }
             calculatedPrices.push([ridePrice, company, carModel, tariffName, carType, fuelType]);
         }
+        
     });
 
     sortedCarPrices = calculatedPrices.sort((a, b) => a[0] - b[0]);
