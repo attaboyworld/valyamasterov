@@ -50,40 +50,66 @@ loadCarData = () => {
         var tripStartFee = parseFloat(element.TripStartFee);
 
         // Bolt Drive Price Calculations
-
-        var waitPrice = waitTime1MinDayTime;
-        var kmPrice = km1;
-
         if (company === "Bolt Drive") {
-            if (((time * min1) + (waitTime * waitPrice)) < h1) {
-                ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
-            } else if ((((time * min1) + (waitTime * waitPrice)) > h1) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 2))) {
-                if ((time + waitTime) <= 60) {
-                    ridePrice = (tripStartFee + h1 + (distance * kmPrice)).toFixed(2);
-                } else {
-                    ridePrice = (h1 + tripStartFee + (time * min1) + ((waitTime - 60) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                }
-            } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 2)) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 3))) {
-                if ((time + waitTime) <= 120) {
-                    ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
-                } else {
-                    ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                }
-            } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 3)) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
-                if ((time + waitTime) <= 180) {
-                    ridePrice = (tripStartFee + (h1 * 3) + (distance * kmPrice)).toFixed(2);
-                } else {
-                    ridePrice = ((h1 * 3) + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                }
+
+            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
+            var totalTime = time + waitTime;
+
+            if ((h1 * 4) / min1 <= totalTime) {
+                ridePrice = day1 + (day1 * Math.floor(totalTime / 1440)) + (distance * km1);
+            } else if ((h1 * 3) / min1 <= totalTime) {
+                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - 180) * Math.floor(totalTime / 180)));
+            } else if ((h1 * 2) / min1 <= totalTime) {
+                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - 120) * Math.floor(totalTime / 120)));
+            } else if (h1 / min1 <= totalTime) {
+                ridePrice = h1 + (distance * km1) + (min1 * ((totalTime - 60) * Math.floor(totalTime / 60)));
             } else {
-                ridePrice = (tripStartFee + day1 + ((Math.floor(time / 1440)) * day1) + (distance * kmPrice)).toFixed(2);
+                ridePrice = (totalTime * min1) + (distance * km1);
             }
             if (ridePrice < minimumTripPrice) {
                 ridePrice = minimumTripPrice;
             }
-            calculatedPrices.push([ridePrice, company, carModel, tariffName, carType, fuelType]);
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
         }
-        
+
+        // OXDrive Price Calculations
+        if (company === "OXDrive") {
+
+            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
+            var totalTime = time + waitTime;
+
+            if ((day7 / day1) * 1440 <= totalTime) {
+                ridePrice = day7 + (distance * km1) + (day1 * Math.floor(totalTime / 10080));
+            } else if ((day1 / h1) * 60 <= totalTime) {
+                ridePrice = day1 + (distance * km1) + (day1 * Math.floor(totalTime / 1440));
+            } else if ((h1 * 4) / min1 <= totalTime) {
+                ridePrice = (h1 * 4) + (distance * km1) + (min1 * ((totalTime - 240) * Math.floor(totalTime / 240)));
+            } else if ((h1 * 3) / min1 <= totalTime) {
+                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - 180) * Math.floor(totalTime / 180)));
+            } else if ((h1 * 2) / min1 <= totalTime) {
+                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - 120) * Math.floor(totalTime / 120)));
+            } else if (h1 / min1 <= totalTime) {
+                ridePrice = h1 + (distance * km1) + (min1 * ((totalTime - 60) * Math.floor(totalTime / 60)));
+            } else {
+                ridePrice = (totalTime * min1) + (distance * km1);
+            }
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
+        }
+
+        // Beast Price Calculations
+        if (company === "Beast" && tariffName !== "Beast+") {
+
+            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
+            var totalTime = time + waitTime;
+
+            if (day1 / min1 <= totalTime) {
+                ridePrice = day1 + (day1 * Math.floor(totalTime / (1440 + (day1 / min1))));
+            } else {
+                ridePrice = tripStartFee + (totalTime * min1);
+            }
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
+        }
+
     });
 
     sortedCarPrices = calculatedPrices.sort((a, b) => a[0] - b[0]);

@@ -178,7 +178,7 @@
                         document.getElementById('totalTime').innerHTML = totalDriveTime + duration;
 
                         var totalDistance = parseFloat(document.getElementById('totalDistance').innerHTML, 2);
-                        document.getElementById('totalDistance').innerHTML = totalDistance + distance;
+                        document.getElementById('totalDistance').innerHTML = (totalDistance + distance).toFixed(2);
 
                         document.getElementById('origin').value = document.getElementById('destination').value;
                         document.getElementById('origin').style.display = "none";
