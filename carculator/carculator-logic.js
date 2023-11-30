@@ -23,10 +23,9 @@ loadCarData = () => {
         // values from car data JSON file
         var company = element.Company;
         var carModel = element.CarModel;
-        var type = element.Type;
+        var carType = element.CarType;
+        var fuelType = element.Type;
         var tariffName = element.TariffName;
-        var riskRate = element.RiskRate;
-        var reducedFinancialResponsibility = element.ReducedFinancialResponsibility;
         var min1 = parseFloat(element.Min1);
         var km1 = parseFloat(element.Km1);
         var h1 = parseFloat(element.H1);
@@ -50,211 +49,39 @@ loadCarData = () => {
         var minimumTripPrice = parseFloat(element.MinimumTripPrice);
         var tripStartFee = parseFloat(element.TripStartFee);
 
-        var recordExists = false;
-
-        // checking if record already exists
-        /*calculatedPrices.forEach(x => {
-            if (x[1] === company && x[2] === carModel){
-                recordExists = true;
-            }
-        })*/
-
-        // Checking day time / night time
-        var isNight;
-
-        if (currentHours > 8 && currentHours < 18) {
-            isNight = false;
-        } else {
-            isNight = true;
-        }
-
-        console.log(kmPrice + " / " + waitPrice);
-
         // Bolt Drive Price Calculations
+
+        var waitPrice = waitTime1MinDayTime;
+        var kmPrice = km1;
+
         if (company === "Bolt Drive") {
-
-            var waitPrice;
-            var kmPrice;
-            
-            if (isNight == false) {
-                kmPrice = pricePerKmDayTime;
-                waitPrice = waitTime1MinDayTime;
-            } else {
-                kmPrice = pricePerKmNightTime;
-                waitPrice = waitTime1MinNightTime;
-            }
-
-            if (true) {
-                if (((time * min1) + (waitTime * waitPrice)) < h1) {
-                    ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
-                } else if ((((time * min1) + (waitTime * waitPrice)) > h1) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 2))) {
-                    if ((time + waitTime) <= 60) {
-                        ridePrice = (tripStartFee + h1 + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = (h1 + tripStartFee + (time * min1) + ((waitTime - 60) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 2)) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 3))) {
-                    if ((time + waitTime) <= 120) {
-                        ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 3)) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
-                    if ((time + waitTime) <= 180) {
-                        ridePrice = (tripStartFee + (h1 * 3) + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = ((h1 * 3) + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
+            if (((time * min1) + (waitTime * waitPrice)) < h1) {
+                ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
+            } else if ((((time * min1) + (waitTime * waitPrice)) > h1) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 2))) {
+                if ((time + waitTime) <= 60) {
+                    ridePrice = (tripStartFee + h1 + (distance * kmPrice)).toFixed(2);
                 } else {
-                    ridePrice = (tripStartFee + day1 + (distance * kmPrice)).toFixed(2);
+                    ridePrice = (h1 + tripStartFee + (time * min1) + ((waitTime - 60) * waitPrice) + (distance * kmPrice)).toFixed(2);
                 }
-            
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-
-                calculatedPrices.push([ridePrice, company, carModel, tariffName]);
-            }
-        }
-
-        // Beast Price Calculations
-        if (company === "Beast" && tariffName !== "Beast+") {
-
-            var waitPrice;
-            var kmPrice;
-            
-            if (isNight == false) {
-                kmPrice = pricePerKmDayTime;
-                waitPrice = waitTime1MinDayTime;
-            } else {
-                kmPrice = pricePerKmNightTime;
-                waitPrice = waitTime1MinNightTime;
-            }
-
-            if (true) {
-                if (((time * min1) + (waitTime * waitPrice)) < day1) {
-                    ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
+            } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 2)) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 3))) {
+                if ((time + waitTime) <= 120) {
+                    ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
                 } else {
-                    ridePrice = (tripStartFee + day1 + (distance * kmPrice)).toFixed(2);
+                    ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
                 }
-            
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-
-                calculatedPrices.push([ridePrice, company, carModel, tariffName]);
-            }
-        }
-
-        // OXDRIVE Price Calculations
-        if (company === "OXDrive") {
-
-            var waitPrice;
-            var kmPrice;
-            
-            if (isNight == false) {
-                kmPrice = pricePerKmDayTime;
-                waitPrice = waitTime1MinDayTime;
-            } else {
-                kmPrice = pricePerKmNightTime;
-                waitPrice = waitTime1MinNightTime;
-            }
-
-            if (true) {
-                if (((time * min1) + (waitTime * waitPrice)) < h1) {
-                    ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
-                } else if ((((time * min1) + (waitTime * waitPrice)) > h1) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 2))) {
-                    if ((time + waitTime) <= 60) {
-                        ridePrice = (tripStartFee + h1 + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = (h1 + tripStartFee + (time * min1) + ((waitTime - 60) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 2)) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 3))) {
-                    if ((time + waitTime) <= 120) {
-                        ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 3)) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
-                    if ((time + waitTime) <= 180) {
-                        ridePrice = (tripStartFee + (h1 * 3) + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = ((h1 * 3) + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
+            } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 3)) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
+                if ((time + waitTime) <= 180) {
+                    ridePrice = (tripStartFee + (h1 * 3) + (distance * kmPrice)).toFixed(2);
                 } else {
-                    ridePrice = (tripStartFee + day1 + (distance * kmPrice)).toFixed(2);
+                    ridePrice = ((h1 * 3) + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
                 }
-            
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-
-                calculatedPrices.push([ridePrice, company, carModel, tariffName]);
-            }
-        }
-        
-        // Carguru Price Calculations
-        if (company === "Carguru") {
-            var waitPrice;
-            var kmPrice;
-            
-            if (isNight == false) {
-                kmPrice = pricePerKmDayTime;
-                waitPrice = waitTime1MinDayTime;
             } else {
-                kmPrice = pricePerKmNightTime;
-                waitPrice = waitTime1MinNightTime;
+                ridePrice = (tripStartFee + day1 + ((Math.floor(time / 1440)) * day1) + (distance * kmPrice)).toFixed(2);
             }
-
-            if (true) {
-                if (((time * min1) + (waitTime * waitPrice)) < h1) {
-                    ridePrice = (tripStartFee + (time * min1) + (waitTime * waitPrice) + (distance * kmPrice)).toFixed(2);
-                } else if ((((time * min1) + (waitTime * waitPrice)) > h1) && (((time * min1) + (waitTime * waitPrice)) < (h1 * 2))) {
-                    if ((time + waitTime) <= 60) {
-                        ridePrice = (tripStartFee + h1 + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = (h1 + tripStartFee + (time * min1) + ((waitTime - 60) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > (h1 * 2))) {
-                    if (tariffName === "Split PRO" && (((time * min1) + (waitTime * waitPrice)) < (h1 * 3))) {
-                        if ((time + waitTime) <= 120) {
-                            ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
-                        } else {
-                            ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                        }
-                    } else if (((time * min1) + (waitTime * waitPrice)) < h3) {
-                        if ((time + waitTime) <= 120) {
-                            ridePrice = (tripStartFee + (h1 * 2) + (distance * kmPrice)).toFixed(2);
-                        } else {
-                            ridePrice = ((h1 * 2) + tripStartFee + (time * min1) + ((waitTime - 120) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                        }
-                    }
-                } else if (tariffName === "Split PRO" && (((time * min1) + (waitTime * waitPrice)) > (h1 * 3)) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
-                    if ((time + waitTime) <= 180) {
-                        ridePrice = (tripStartFee + (h1 * 3) + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = ((h1 * 3) + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if ((((time * min1) + (waitTime * waitPrice)) > h3) && (((time * min1) + (waitTime * waitPrice)) < day1)) {
-                    if ((time + waitTime) <= 180) {
-                        ridePrice = (tripStartFee + h3 + (distance * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = (h3 + tripStartFee + (time * min1) + ((waitTime - 180) * waitPrice) + (distance * kmPrice)).toFixed(2);
-                    }
-                } else if (((time * min1) + (waitTime * waitPrice)) >= day1) {
-                    if (distance >= 100) {
-                        ridePrice = (day1 + tripStartFee + ((distance - 100) * kmPrice)).toFixed(2);
-                    } else {
-                        ridePrice = (day1 + tripStartFee).toFixed(2);
-                    }
-                }
-                
-                if (ridePrice < minimumTripPrice) {
-                    ridePrice = minimumTripPrice;
-                }
-                
-                calculatedPrices.push([ridePrice, company, carModel, tariffName]);
-            } 
+            if (ridePrice < minimumTripPrice) {
+                ridePrice = minimumTripPrice;
+            }
+            calculatedPrices.push([ridePrice, company, carModel, tariffName, carType, fuelType]);
         }
     });
 
@@ -303,7 +130,11 @@ loadCarData = () => {
 
         const resultCard = document.createElement("div");
         resultCard.setAttribute("class", "resultOutputCard");
-        resultCard.innerHTML = carImageDisplay + '<p>' + sortedCarPrices[i][1] + "<span class='tariff'>" + sortedCarPrices[i][3] + '</span>' + '<br>' + sortedCarPrices[i][2] + '<br> EUR ' + sortedCarPrices[i][0] + '</p>';
+
+        resultCard.innerHTML = 
+        '<div class="carImage">' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '</div>' + '</div>'
+        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b></p></div>';
+        
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);
     }
