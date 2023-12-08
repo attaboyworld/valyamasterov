@@ -4330,6 +4330,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Touch.Exps.SpeedAt,
 		C3.Plugins.System.Cnds.CompareBetween,
 		C3.Plugins.Touch.Exps.AngleAt,
+		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Behaviors.MoveTo.Acts.MoveToPosition,
@@ -4576,9 +4577,10 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0);
 		},
-		() => 200,
+		() => 600,
 		() => -45,
 		() => 45,
+		() => 0.5,
 		() => 135,
 		() => 225,
 		() => 328,
