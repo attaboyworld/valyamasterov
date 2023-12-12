@@ -4349,9 +4349,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SubVar,
 		C3.Behaviors.MoveTo.Acts.MoveToPosition,
 		C3.Plugins.Sprite.Acts.SetX,
-		C3.Plugins.Mouse.Exps.X,
+		C3.Plugins.Touch.Exps.X,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
-		C3.Plugins.Touch.Exps.AbsoluteX,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Plugins.Sprite.Acts.Destroy,
@@ -4378,8 +4377,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Mouse.Cnds.OnObjectClicked,
-		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
+		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Cnds.OnLoadFinished
 	];
 };
