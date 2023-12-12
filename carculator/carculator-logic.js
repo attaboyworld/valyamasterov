@@ -55,12 +55,16 @@ loadCarData = () => {
             // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
             var totalTime = time + waitTime;
 
-            if ((h1 * 4) / min1 <= totalTime) {
-                ridePrice = day1 + (day1 * Math.floor(totalTime / 1440)) + (distance * km1);
+            if (((day1) / h1) * 60 <= totalTime) {
+                ridePrice = day1 + (distance * km1);
+            } else if ((h1 * 5) / min1 <= totalTime) {
+                ridePrice = (h1 * 5) + (distance * km1) + (min1 * ((totalTime - (h1 * 5) / min1) * Math.floor(totalTime / (h1 * 5) / min1)));
+            } else if ((h1 * 4) / min1 <= totalTime) {
+                ridePrice = (h1 * 4) + (distance * km1) + (min1 * ((totalTime - (h1 * 4) / min1) * Math.floor(totalTime / (h1 * 4) / min1)));
             } else if ((h1 * 3) / min1 <= totalTime) {
-                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - 180) * Math.floor(totalTime / 180)));
+                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - (h1 * 3) / min1) * Math.floor(totalTime / (h1 * 3) / min1)));
             } else if ((h1 * 2) / min1 <= totalTime) {
-                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - 120) * Math.floor(totalTime / 120)));
+                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - (h1 * 2) / min1) * Math.floor(totalTime / (h1 * 2) / min1)));
             } else if (h1 / min1 <= totalTime) {
                 ridePrice = h1 + (distance * km1) + (min1 * ((totalTime - 60) * Math.floor(totalTime / 60)));
             } else {
@@ -79,17 +83,21 @@ loadCarData = () => {
             var totalTime = time + waitTime;
 
             if ((day7 / day1) * 1440 <= totalTime) {
-                ridePrice = day7 + (distance * km1) + (day1 * Math.floor(totalTime / 10080));
+                ridePrice = day7 + (distance * km1);
             } else if ((day1 / h1) * 60 <= totalTime) {
                 ridePrice = day1 + (distance * km1) + (day1 * Math.floor(totalTime / 1440));
+            } else if ((h1 * 6) / min1 <= totalTime) {
+                ridePrice = (h1 * 6) + (distance * km1);
+            } else if ((h1 * 5) / min1 <= totalTime) {
+                ridePrice = (h1 * 5) + (distance * km1);
             } else if ((h1 * 4) / min1 <= totalTime) {
-                ridePrice = (h1 * 4) + (distance * km1) + (min1 * ((totalTime - 240) * Math.floor(totalTime / 240)));
+                ridePrice = (h1 * 4) + (distance * km1);
             } else if ((h1 * 3) / min1 <= totalTime) {
-                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - 180) * Math.floor(totalTime / 180)));
+                ridePrice = (h1 * 3) + (distance * km1);
             } else if ((h1 * 2) / min1 <= totalTime) {
-                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - 120) * Math.floor(totalTime / 120)));
+                ridePrice = (h1 * 2) + (distance * km1);
             } else if (h1 / min1 <= totalTime) {
-                ridePrice = h1 + (distance * km1) + (min1 * ((totalTime - 60) * Math.floor(totalTime / 60)));
+                ridePrice = h1 + (distance * km1);
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
             }
@@ -103,7 +111,7 @@ loadCarData = () => {
             var totalTime = time + waitTime;
 
             if (day1 / min1 <= totalTime) {
-                ridePrice = day1 + (day1 * Math.floor(totalTime / (1440 + (day1 / min1))));
+                ridePrice = tripStartFee + day1;
             } else {
                 ridePrice = tripStartFee + (totalTime * min1);
             }
