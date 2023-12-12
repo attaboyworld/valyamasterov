@@ -54,26 +54,43 @@ loadCarData = () => {
 
             // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
             var totalTime = time + waitTime;
+            var calcBreakDown = "";
 
-            if (((day1) / h1) * 60 <= totalTime) {
+            if (((day1) / h1) * 60 <= totalTime && h1 * 6 < h1 * 5 + (totalTime - 300) * min1) {
                 ridePrice = day1 + (distance * km1);
-            } else if ((h1 * 5) / min1 <= totalTime) {
-                ridePrice = (h1 * 5) + (distance * km1) + (min1 * ((totalTime - (h1 * 5) / min1) * Math.floor(totalTime / (h1 * 5) / min1)));
-            } else if ((h1 * 4) / min1 <= totalTime) {
-                ridePrice = (h1 * 4) + (distance * km1) + (min1 * ((totalTime - (h1 * 4) / min1) * Math.floor(totalTime / (h1 * 4) / min1)));
-            } else if ((h1 * 3) / min1 <= totalTime) {
-                ridePrice = (h1 * 3) + (distance * km1) + (min1 * ((totalTime - (h1 * 3) / min1) * Math.floor(totalTime / (h1 * 3) / min1)));
-            } else if ((h1 * 2) / min1 <= totalTime) {
-                ridePrice = (h1 * 2) + (distance * km1) + (min1 * ((totalTime - (h1 * 2) / min1) * Math.floor(totalTime / (h1 * 2) / min1)));
+            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
+                ridePrice = (h1 * 5) + (distance * km1);
+                if (totalTime > 300) {
+                    ridePrice += min1 * (totalTime - 300);
+                }
+            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
+                ridePrice = (h1 * 4) + (distance * km1);
+                if (totalTime > 240) {
+                    ridePrice += min1 * (totalTime - 240);
+                }
+            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
+                ridePrice = (h1 * 3) + (distance * km1);
+                if (totalTime > 180) {
+                    ridePrice += min1 * (totalTime - 180);
+                }
+            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                ridePrice = (h1 * 2) + (distance * km1);
+                if (totalTime > 120) {
+                    ridePrice += min1 * (totalTime - 120);
+                }
             } else if (h1 / min1 <= totalTime) {
-                ridePrice = h1 + (distance * km1) + (min1 * ((totalTime - 60) * Math.floor(totalTime / 60)));
+                ridePrice = h1 + (distance * km1);
+                if (totalTime > 60) {
+                    ridePrice += min1 * (totalTime - 60);
+                }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + ") + (" + distance + "km" + " * " + km1 + ")";
             }
             if (ridePrice < minimumTripPrice) {
                 ridePrice = minimumTripPrice;
             }
-            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
 
         // OXDrive Price Calculations
@@ -81,25 +98,45 @@ loadCarData = () => {
 
             // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
             var totalTime = time + waitTime;
+            var calcBreakDown = "";
 
-            if ((day7 / day1) * 1440 <= totalTime) {
+            if ((day7 / day1) * 1440 <= totalTime && day7 < (day1 * Math.floor(totalTime / 1440)) * min1) {
                 ridePrice = day7 + (distance * km1);
-            } else if ((day1 / h1) * 60 <= totalTime) {
+            } else if ((day1 / h1) * 60 <= totalTime && day1 < h1 * 6 + (totalTime - 360) * min1) {
                 ridePrice = day1 + (distance * km1) + (day1 * Math.floor(totalTime / 1440));
-            } else if ((h1 * 6) / min1 <= totalTime) {
+            } else if ((h1 * 6) / min1 <= totalTime && h1 * 6 < h1 * 5 + (totalTime - 300) * min1) {
                 ridePrice = (h1 * 6) + (distance * km1);
-            } else if ((h1 * 5) / min1 <= totalTime) {
+                if (totalTime > 360) {
+                    ridePrice += min1 * (totalTime - 360);
+                }
+            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
                 ridePrice = (h1 * 5) + (distance * km1);
-            } else if ((h1 * 4) / min1 <= totalTime) {
+                if (totalTime > 300) {
+                    ridePrice += min1 * (totalTime - 300);
+                }
+            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
                 ridePrice = (h1 * 4) + (distance * km1);
-            } else if ((h1 * 3) / min1 <= totalTime) {
+                if (totalTime > 240) {
+                    ridePrice += min1 * (totalTime - 240);
+                }
+            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
                 ridePrice = (h1 * 3) + (distance * km1);
-            } else if ((h1 * 2) / min1 <= totalTime) {
+                if (totalTime > 180) {
+                    ridePrice += min1 * (totalTime - 180);
+                }
+            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                 ridePrice = (h1 * 2) + (distance * km1);
+                if (totalTime > 120) {
+                    ridePrice += min1 * (totalTime - 120);
+                }
             } else if (h1 / min1 <= totalTime) {
                 ridePrice = h1 + (distance * km1);
+                if (totalTime > 60) {
+                    ridePrice += min1 * (totalTime - 60);
+                }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + ") + (" + distance + "km" + " * " + km1 + ")";
             }
             calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
         }
@@ -115,7 +152,7 @@ loadCarData = () => {
             } else {
                 ridePrice = tripStartFee + (totalTime * min1);
             }
-            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
 
     });
@@ -168,7 +205,7 @@ loadCarData = () => {
 
         resultCard.innerHTML = 
         '<div class="carImage">' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '</div>' + '</div>'
-        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b></p></div>';
+        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b><br>' + sortedCarPrices[i][6] + '</p></div>';
         
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);

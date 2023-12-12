@@ -2,6 +2,19 @@ body {
     padding: 0px 1%;
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+
+#projectContainer {
+    width: 90%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 12px;
 }
 
 h1 {
@@ -80,7 +93,7 @@ button {
 }
 
 #resultContainer {
-    width: auto;
+    width: 100%;
 }
 
 .resultOutputCard {
@@ -122,7 +135,6 @@ button {
     padding: 14px 21px;
     border-radius: 28px; */
     width: 100%;
-    max-width: 800px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -131,7 +143,6 @@ button {
 }
 
 .stepInput {
-    max-width: 800px;
     width: 100%;
     display: flex;
     justify-content: space-between;
