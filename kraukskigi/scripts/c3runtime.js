@@ -4597,7 +4597,7 @@ self.C3_ExpressionFuncs = [
 		() => 270,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (1800 + (20 * v0.GetValue()));
+			return () => (1200 + (20 * v0.GetValue()));
 		},
 		() => 90,
 		p => {
@@ -4633,7 +4633,7 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
-			return () => (0.1 + (v0.GetValue() / ((v1.GetValue() + 5) * 0.1)));
+			return () => (0.2 + (v0.GetValue() / ((v1.GetValue() + 5) * 0.1)));
 		},
 		() => 4500,
 		p => {
@@ -4646,7 +4646,7 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
-			return () => ((3 + Math.floor(f0(3))) + (v1.GetValue() / ((v2.GetValue() + 5) * 0.1)));
+			return () => ((5 + Math.floor(f0(3))) + (v1.GetValue() / ((v2.GetValue() + 5) * 0.1)));
 		},
 		() => 4530,
 		p => {
@@ -4680,8 +4680,8 @@ self.C3_ExpressionFuncs = [
 		() => "+5 Seconds",
 		() => "Bonus Points x3",
 		() => "Bonuses",
-		() => 42000,
-		() => 34000,
+		() => 52000,
+		() => 48000,
 		() => "Tint",
 		() => 16000,
 		() => 8000,
