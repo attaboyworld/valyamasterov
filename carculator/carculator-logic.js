@@ -85,7 +85,7 @@ loadCarData = () => {
                 }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
-                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + ") + (" + distance + "km" + " * " + km1 + ")";
+                calcBreakDown = "(" + totalTime + " Min" + " * EUR " + min1 + ") + (" + distance + " Km" + " * EUR " + km1 + ")";
             }
             if (ridePrice < minimumTripPrice) {
                 ridePrice = minimumTripPrice;
@@ -136,7 +136,7 @@ loadCarData = () => {
                 }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
-                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + ") + (" + distance + "km" + " * " + km1 + ")";
+                calcBreakDown = "(" + totalTime + " Min" + " * EUR " + min1 + ") + (" + distance + " Km" + " * EUR " + km1 + ")";
             }
             calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
         }

@@ -4348,13 +4348,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Behaviors.MoveTo.Acts.MoveToPosition,
-		C3.Plugins.Sprite.Acts.SetX,
-		C3.Plugins.Touch.Exps.X,
-		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.Text.Acts.SetFontColor,
+		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Behaviors.MoveTo.Acts.SetMaxSpeed,
 		C3.Behaviors.MoveTo.Acts.SetAcceleration,
 		C3.Behaviors.MoveTo.Acts.SetDeceleration,
@@ -4366,10 +4365,13 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.MoveTo.Acts.MoveToObject,
 		C3.Behaviors.MoveTo.Acts.SetEnabled,
 		C3.Plugins.Text.Acts.SetVisible,
+		C3.Plugins.Text.Acts.SetX,
+		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Particles.Acts.SetPosToObject,
 		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Plugins.System.Acts.SetLayerVisible,
+		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.LocalStorage.Acts.GetItem,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.LocalStorage.Acts.SetItem,
@@ -4377,9 +4379,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Mouse.Cnds.OnObjectClicked,
-		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.System.Cnds.OnLoadFinished
+		C3.Plugins.Touch.Cnds.OnTapGestureObject,
+		C3.Plugins.System.Cnds.OnLoadFinished,
+		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.System.Acts.GoToLayoutByName
 	];
 };
 self.C3_JsPropNameTable = [
@@ -4421,10 +4425,17 @@ self.C3_JsPropNameTable = [
 	{touchControlCenter: 0},
 	{touchControlRight: 0},
 	{touchControlLine: 0},
+	{Sprite: 0},
+	{hiscorePlaceholder: 0},
+	{multiObj: 0},
+	{multiplierText: 0},
+	{Sprite2: 0},
+	{multiText: 0},
 	{cheeseSpawnRow: 0},
 	{coinSpawnRow: 0},
 	{frostSpawnRow: 0},
 	{magnetSpawnRow: 0},
+	{multiplierSpawnRow: 0},
 	{timeSpawnRow: 0},
 	{backgroundSpawnRow: 0},
 	{playerPosition: 0},
@@ -4435,7 +4446,9 @@ self.C3_JsPropNameTable = [
 	{isFrozen: 0},
 	{magnetActive: 0},
 	{totalTimePlayed: 0},
-	{bonusTextTimer: 0}
+	{bonusTextTimer: 0},
+	{modalStep: 0},
+	{multiplierActive: 0}
 ];
 
 self.InstanceType = {
@@ -4472,7 +4485,13 @@ self.InstanceType = {
 	touchControlLeft: class extends self.ISpriteInstance {},
 	touchControlCenter: class extends self.ISpriteInstance {},
 	touchControlRight: class extends self.ISpriteInstance {},
-	touchControlLine: class extends self.ISpriteInstance {}
+	touchControlLine: class extends self.ISpriteInstance {},
+	Sprite: class extends self.ISpriteInstance {},
+	hiscorePlaceholder: class extends self.ISpriteInstance {},
+	multiObj: class extends self.ISpriteInstance {},
+	multiplierText: class extends self.ITextInstance {},
+	Sprite2: class extends self.ISpriteInstance {},
+	multiText: class extends self.ITextInstance {}
 }
 }
 
@@ -4578,9 +4597,13 @@ self.C3_ExpressionFuncs = [
 		() => 270,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (1600 + (15 * v0.GetValue()));
+			return () => (1800 + (20 * v0.GetValue()));
 		},
 		() => 90,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (900 + (30 * v0.GetValue()));
+		},
 		() => -1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4617,6 +4640,12 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
+			return () => ((6 + Math.floor(f0(6))) + (v1.GetValue() / ((v2.GetValue() + 5) * 0.1)));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
 			return () => ((3 + Math.floor(f0(3))) + (v1.GetValue() / ((v2.GetValue() + 5) * 0.1)));
 		},
 		() => 4530,
@@ -4637,24 +4666,29 @@ self.C3_ExpressionFuncs = [
 		() => 800,
 		() => 0,
 		() => 1088,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
 		() => "Collisions",
 		() => "eat",
 		() => 10,
 		() => "+10 Points",
+		() => 65280,
+		() => 30,
+		() => "+30 Points",
 		() => 5,
 		() => "Frreeeeezeeee",
+		() => 3937500,
 		() => "Magnet!",
 		() => "+5 Seconds",
+		() => "Bonus Points x3",
 		() => "Bonuses",
-		() => 32000,
-		() => 20000,
+		() => 42000,
+		() => 34000,
 		() => "Tint",
-		() => 14000,
-		() => 3500,
+		() => 16000,
+		() => 8000,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject();
+		},
 		() => 0.66,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4667,7 +4701,7 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => and("Score: ", v0.GetValue());
+			return () => and(("Score: " + "\n"), v0.GetValue());
 		},
 		() => "Modal",
 		() => "UI",
@@ -4677,12 +4711,18 @@ self.C3_ExpressionFuncs = [
 			return () => and(("New Hi-Score!" + "\n"), v0.GetValue());
 		},
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
+		p => {
 			const v0 = p._GetNode(0).GetVar();
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => and(((and("Score: ", v0.GetValue()) + "\n") + "Your Hi-Score: "), f1());
 		},
-		() => 30,
-		() => 4
+		() => 4,
+		() => "Next",
+		() => "Play again",
+		() => "starting page"
 ];
 
 
