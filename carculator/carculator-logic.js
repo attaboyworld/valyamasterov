@@ -49,6 +49,126 @@ loadCarData = () => {
         var minimumTripPrice = parseFloat(element.MinimumTripPrice);
         var tripStartFee = parseFloat(element.TripStartFee);
 
+
+        // Carguru Price Calculations
+        if (company === "Carguru") {
+
+            var totalTime = time + waitTime;
+            var calcBreakDown = "";
+
+            if (tariffName.trim() === "Basic") {
+
+                if (distance > 100) {
+                    adjustedDistance = distance - 100;
+                } else {
+                    adjustedDistance = 0;
+                }
+                
+                if ((day1 * 180) / h3 <= totalTime && day1 < h3 + h1 * 2 + (totalTime - 300) * min1) {
+                    ridePrice = day1 + (adjustedDistance * km1);
+                    calcBreakDown = "1 Day (" + day1 + "€) + " + "(" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)" + "<br>¹<i>Daily 100km included in tariff</i>";
+                } else if ((h3 + h1 * 2) / min1 <= totalTime && h3 + h1 * 2 < h3 + h1 + (totalTime - 240) * min1) {
+                    ridePrice = h3 + h1 * 2 + (adjustedDistance * km1);
+                    calcBreakDown = "3 Hours (" + h3 + "€) + " + "2 * 1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    if (totalTime > 300) {
+                        ridePrice += min1 * (totalTime - 300);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
+                    }
+                    calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
+                } else if ((h3 + h1) / min1 <= totalTime && h3 + h1 < h3 + (totalTime - 180) * min1) {
+                    ridePrice = h3 + h1 + (adjustedDistance * km1);
+                    calcBreakDown = "3 Hours (" + h3 + "€) + " + "1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    if (totalTime > 240) {
+                        ridePrice += min1 * (totalTime - 240);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
+                    }
+                    calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
+                } else if (h3 / min1 <= totalTime && h3 < h1 * 2 + (totalTime - 120) * min1) {
+                    ridePrice = h3 + (adjustedDistance * km1);
+                    calcBreakDown = "3 Hours (" + h3 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    if (totalTime > 180) {
+                        ridePrice += min1 * (totalTime - 180);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
+                    } 
+                    calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
+                } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                    ridePrice = (h1 * 2) + (adjustedDistance * km1);
+                    calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    if (totalTime > 120) {
+                        ridePrice += min1 * (totalTime - 120);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
+                    } 
+                    calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
+                } else if (h1 / min1 <= totalTime) {
+                    ridePrice = h1 + (adjustedDistance * km1);
+                    calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    if (totalTime > 60) {
+                        ridePrice += min1 * (totalTime - 60);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
+                    }
+                    calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
+                } else {
+                    ridePrice = (totalTime * min1) + (adjustedDistance * km1);
+                    calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)<br>¹<i>Daily 100km included in tariff</i>";
+                }
+                if (ridePrice < minimumTripPrice) {
+                    ridePrice = minimumTripPrice;
+                    calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
+                }
+                calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName.trim(), carType, fuelType, calcBreakDown]);
+            }
+
+            if (tariffName.trim() === "Split Basic") {
+                if ((day1 * 60) / h1 <= totalTime && day1 < h1 * 5 + (totalTime - 300) * min1) {
+                    ridePrice = day1 + (distance * km1);
+                    calcBreakDown = "1 Day (" + day1 + "€) + " + "(" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                } else if (h1 * 5 / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
+                    ridePrice = h1 * 5 + (distance * km1);
+                    calcBreakDown = "5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                    if (totalTime > 300) {
+                        ridePrice += min1 * (totalTime - 300);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
+                    }
+                } else if (h1 * 4 / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
+                    ridePrice = h1 * 4 + (distance * km1);
+                    calcBreakDown = "4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                    if (totalTime > 240) {
+                        ridePrice += min1 * (totalTime - 240);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
+                    }
+                } else if (h1 * 3 / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
+                    ridePrice = (h1 * 3) + (distance * km1);
+                    calcBreakDown = "3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                    if (totalTime > 180) {
+                        ridePrice += min1 * (totalTime - 180);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
+                    } 
+                } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                    ridePrice = (h1 * 2) + (distance * km1);
+                    calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                    if (totalTime > 120) {
+                        ridePrice += min1 * (totalTime - 120);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
+                    } 
+                } else if (h1 / min1 <= totalTime) {
+                    ridePrice = h1 + (distance * km1);
+                    calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                    if (totalTime > 60) {
+                        ridePrice += min1 * (totalTime - 60);
+                        calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
+                    }
+                } else {
+                    ridePrice = (totalTime * min1) + (distance * km1);
+                    calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                }
+                if (ridePrice < minimumTripPrice) {
+                    ridePrice = minimumTripPrice;
+                    calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
+                }
+                calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName.trim(), carType, fuelType, calcBreakDown]);
+            }
+        }
+
         // Bolt Drive Price Calculations
         if (company === "Bolt Drive") {
 
@@ -58,37 +178,49 @@ loadCarData = () => {
 
             if (((day1) / h1) * 60 <= totalTime && h1 * 6 < h1 * 5 + (totalTime - 300) * min1) {
                 ridePrice = day1 + (distance * km1);
+                calcBreakDown = "1 Day (" + day1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
             } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
                 ridePrice = (h1 * 5) + (distance * km1);
+                calcBreakDown = "5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 300) {
                     ridePrice += min1 * (totalTime - 300);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
                 }
             } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
                 ridePrice = (h1 * 4) + (distance * km1);
+                calcBreakDown = "4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 240) {
                     ridePrice += min1 * (totalTime - 240);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
                 }
             } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
                 ridePrice = (h1 * 3) + (distance * km1);
+                calcBreakDown = "3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 180) {
                     ridePrice += min1 * (totalTime - 180);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
                 }
             } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                 ridePrice = (h1 * 2) + (distance * km1);
+                calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 120) {
                     ridePrice += min1 * (totalTime - 120);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
                 }
             } else if (h1 / min1 <= totalTime) {
                 ridePrice = h1 + (distance * km1);
+                calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 60) {
                     ridePrice += min1 * (totalTime - 60);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
                 }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
-                calcBreakDown = "(" + totalTime + " Min" + " * EUR " + min1 + ") + (" + distance + " Km" + " * EUR " + km1 + ")";
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance + "km" + " * " + km1 + "€)";
             }
             if (ridePrice < minimumTripPrice) {
                 ridePrice = minimumTripPrice;
+                calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
             }
             calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
@@ -100,45 +232,56 @@ loadCarData = () => {
             var totalTime = time + waitTime;
             var calcBreakDown = "";
 
-            if ((day7 / day1) * 1440 <= totalTime && day7 < (day1 * Math.floor(totalTime / 1440)) * min1) {
-                ridePrice = day7 + (distance * km1);
-            } else if ((day1 / h1) * 60 <= totalTime && day1 < h1 * 6 + (totalTime - 360) * min1) {
-                ridePrice = day1 + (distance * km1) + (day1 * Math.floor(totalTime / 1440));
+            if ((day1 / h1) * 60 <= totalTime && day1 < h1 * 6 + (totalTime - 360) * min1) {
+                ridePrice = day1 + (distance * km1);
+                calcBreakDown = "1 Day (" + day1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
             } else if ((h1 * 6) / min1 <= totalTime && h1 * 6 < h1 * 5 + (totalTime - 300) * min1) {
                 ridePrice = (h1 * 6) + (distance * km1);
+                calcBreakDown = "6 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 360) {
                     ridePrice += min1 * (totalTime - 360);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 360) + "min)";
                 }
             } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
                 ridePrice = (h1 * 5) + (distance * km1);
+                calcBreakDown = "5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 300) {
                     ridePrice += min1 * (totalTime - 300);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
                 }
             } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
                 ridePrice = (h1 * 4) + (distance * km1);
+                calcBreakDown = "4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 240) {
                     ridePrice += min1 * (totalTime - 240);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
                 }
             } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
                 ridePrice = (h1 * 3) + (distance * km1);
+                calcBreakDown = "3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 180) {
                     ridePrice += min1 * (totalTime - 180);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
                 }
             } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                 ridePrice = (h1 * 2) + (distance * km1);
+                calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 120) {
                     ridePrice += min1 * (totalTime - 120);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
                 }
             } else if (h1 / min1 <= totalTime) {
                 ridePrice = h1 + (distance * km1);
+                calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 60) {
                     ridePrice += min1 * (totalTime - 60);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
                 }
             } else {
                 ridePrice = (totalTime * min1) + (distance * km1);
-                calcBreakDown = "(" + totalTime + " Min" + " * EUR " + min1 + ") + (" + distance + " Km" + " * EUR " + km1 + ")";
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance + "km" + " * " + km1 + "€)";
             }
-            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType]);
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
 
         // Beast Price Calculations
@@ -146,11 +289,14 @@ loadCarData = () => {
 
             // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
             var totalTime = time + waitTime;
+            var calcBreakDown = "";
 
             if (day1 / min1 <= totalTime) {
                 ridePrice = tripStartFee + day1;
+                calcBreakDown = "Trip Start Fee (" + tripStartFee + "€) + 1 Day (" + day1 + "€)";
             } else {
                 ridePrice = tripStartFee + (totalTime * min1);
+                calcBreakDown = "Trip Start Fee (" + tripStartFee + "€) + (" + totalTime.toFixed(0) + "min" + " * " + min1 + "€)";
             }
             calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
@@ -205,7 +351,7 @@ loadCarData = () => {
 
         resultCard.innerHTML = 
         '<div class="carImage">' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '</div>' + '</div>'
-        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b><br>' + sortedCarPrices[i][6] + '</p></div>';
+        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b></p>' + '<div class="priceBreakdown">' + sortedCarPrices[i][6] + '</div></div>';
         
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);
