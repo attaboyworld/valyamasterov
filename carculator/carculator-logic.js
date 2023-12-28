@@ -64,12 +64,12 @@ loadCarData = () => {
                     adjustedDistance = 0;
                 }
                 
-                if ((day1 * 180) / h3 <= totalTime && day1 < h3 + h2 + (totalTime - 300) * min1) {
+                if ((day1 * 180) / h3 <= totalTime && day1 < h3 + h1 * 2 + (totalTime - 300) * min1) {
                     ridePrice = day1 + (adjustedDistance * km1);
                     calcBreakDown = "1 Day (" + day1 + "€) + " + "(" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)" + "<br>¹<i>Daily 100km included in tariff</i>";
-                } else if ((h3 + h2) / min1 <= totalTime && h3 + h2 < h3 + h1 + (totalTime - 240) * min1) {
-                    ridePrice = h3 + h2 + (adjustedDistance * km1);
-                    calcBreakDown = "3 Hours (" + h3 + "€) + " + "2 Hours (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                } else if ((h3 + h1 * 2) / min1 <= totalTime && h3 + h1 * 2 < h3 + h1 + (totalTime - 240) * min1) {
+                    ridePrice = h3 + h1 * 2 + (adjustedDistance * km1);
+                    calcBreakDown = "3 Hours (" + h3 + "€) + " + "2 * 1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
                     if (totalTime > 300) {
                         ridePrice += min1 * (totalTime - 300);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
@@ -83,7 +83,7 @@ loadCarData = () => {
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
                     }
                     calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
-                } else if (h3 / min1 <= totalTime && h3 < h2 + (totalTime - 120) * min1) {
+                } else if (h3 / min1 <= totalTime && h3 < h1 * 2 + (totalTime - 120) * min1) {
                     ridePrice = h3 + (adjustedDistance * km1);
                     calcBreakDown = "3 Hours (" + h3 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
                     if (totalTime > 180) {
@@ -91,9 +91,9 @@ loadCarData = () => {
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
                     } 
                     calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
-                } else if (h2 / min1 <= totalTime && h2 < h1 + (totalTime - 60) * min1) {
+                } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                     ridePrice = (h1 * 2) + (adjustedDistance * km1);
-                    calcBreakDown = "2 Hours (" + h2 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
+                    calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)";
                     if (totalTime > 120) {
                         ridePrice += min1 * (totalTime - 120);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
