@@ -30,3 +30,7 @@ p:nth-child(2){
 p:nth-child(3){
 	background-color: #AD8A56;
 }
+
+.userScore{
+	color: green;
+}
