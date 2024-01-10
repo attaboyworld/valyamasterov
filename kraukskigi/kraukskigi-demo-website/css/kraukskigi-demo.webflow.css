@@ -347,11 +347,14 @@
   }
 
   .html-embed {
-    width: 95%;
+    width: 90%;
+    height: 90%;
   }
 
   .gamecontainer {
     width: 100%;
+    height: 100vh;
+    background-color: #20344e;
     justify-content: center;
     display: flex;
   }
