@@ -210,6 +210,7 @@
 
 .gamecontainer {
   z-index: 5;
+  width: 100%;
   height: 90vh;
   max-width: 1140px;
   position: relative;
@@ -343,6 +344,16 @@
 
   .nav-menu-two {
     flex-direction: column;
+  }
+
+  .html-embed {
+    width: 95%;
+  }
+
+  .gamecontainer {
+    width: 100%;
+    justify-content: center;
+    display: flex;
   }
 
   .gamenavbar {
