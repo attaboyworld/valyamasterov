@@ -248,3 +248,7 @@ td {
 .priceBreakdown {
     font-size: 10px;
 }
+
+#totalWaitNight {
+    display: none;
+}

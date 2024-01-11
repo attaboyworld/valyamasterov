@@ -69,6 +69,8 @@
                 </tr>
             </table>
 
+            <div id="totalWaitNight">0</div>
+
             <button onclick="loadCarData()">Show deals</button>
 
         </div>
@@ -86,6 +88,7 @@
 </div>
 
     <script>
+
         function initAutocomplete() {
             var originAutocomplete = new google.maps.places.Autocomplete(
                 document.getElementById('origin'), { types: ['geocode'] }
@@ -124,6 +127,20 @@
                 lineElement.classList.add('line')
                 document.getElementById('route').appendChild(lineElement);
                 var totalWaitTime = parseInt(document.getElementById('totalWait').innerHTML);
+                var totalNightWaitTime = parseInt(document.getElementById('totalWaitNight').innerHTML); 
+
+                var totalTripTime = parseInt(document.getElementById('totalTime').innerHTML) + totalWaitTime;
+
+                if ((currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) > 1380) {
+                    if ((currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) > 1800) {
+                        totalNightWaitTime = (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1380) - (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1800);
+                        document.getElementById('totalWaitNight').innerHTML = totalNightWaitTime;
+                    } else {
+                        totalNightWaitTime = (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1380);
+                        document.getElementById('totalWaitNight').innerHTML = totalNightWaitTime;
+                    }
+                }
+
                 document.getElementById('totalWait').innerHTML = totalWaitTime + waitTime;
                 var stepElement = document.createElement("div");
                 stepElement.classList.add('stepElement')
@@ -213,6 +230,7 @@
         var currentHours = today.getHours();
         var currentMinutes = ("0" + today.getMinutes()).slice(-2);
         console.log(currentHours);
+        console.log(currentMinutes);
 
         const editTime = document.getElementById("editTime");
         const dateTimePicker = document.getElementById('datetimepicker');

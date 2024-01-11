@@ -15,8 +15,10 @@ loadCarData = () => {
 
     // values from calculator form inputs
     var distance = parseFloat(document.getElementById("totalDistance").innerHTML);
-    var time = parseFloat(document.getElementById("totalTime").innerHTML);
-    var waitTime = parseFloat(document.getElementById("totalWait").innerHTML);
+    var time = parseInt(document.getElementById("totalTime").innerHTML);
+    var waitTime = parseInt(document.getElementById("totalWait").innerHTML);
+    var totalNightWaitTime = parseInt(document.getElementById("totalWaitNight").innerHTML);
+
 
     carData.forEach(element => {
         
@@ -53,7 +55,8 @@ loadCarData = () => {
         // Carguru Price Calculations
         if (company === "Carguru") {
 
-            var totalTime = time + waitTime;
+            var totalTime = time + waitTime - totalNightWaitTime;
+            console.log(totalNightWaitTime);
             var calcBreakDown = "";
 
             if (tariffName.trim() === "Basic") {
@@ -111,6 +114,11 @@ loadCarData = () => {
                     ridePrice = (totalTime * min1) + (adjustedDistance * km1);
                     calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)<br>¹<i>Daily 100km included in tariff</i>";
                 }
+                
+                if (totalNightWaitTime > 0) {
+                    calcBreakDown += "<br>Free Night Time Wait (" + totalNightWaitTime + "min)";
+                }
+
                 if (ridePrice < minimumTripPrice) {
                     ridePrice = minimumTripPrice;
                     calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
@@ -161,6 +169,11 @@ loadCarData = () => {
                     ridePrice = (totalTime * min1) + (distance * km1);
                     calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 }
+
+                if (totalNightWaitTime > 0) {
+                    calcBreakDown += "<br>Free Night Time Wait (" + totalNightWaitTime + "min)";
+                }
+
                 if (ridePrice < minimumTripPrice) {
                     ridePrice = minimumTripPrice;
                     calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
