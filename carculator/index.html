@@ -131,15 +131,24 @@
 
                 var totalTripTime = parseInt(document.getElementById('totalTime').innerHTML) + totalWaitTime;
 
-                if ((currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) > 1380) {
-                    if ((currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) > 1800) {
-                        totalNightWaitTime = (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1380) - (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1800);
-                        document.getElementById('totalWaitNight').innerHTML = totalNightWaitTime;
+                var adjustedHours = currentHours;
+
+                if (adjustedHours >= 0 && adjustedHours < 7) {
+                    adjustedHours += 23;
+                }
+
+                if ((adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) > 1380 && (adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime) < 1800) {
+                    if (adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime < 1380) {
+                        totalNightWaitTime += (adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) - 1380;
+                    } else if (adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime > 1800) {
+                        totalNightWaitTime += waitTime;
+                        totalNightWaitTime -= (adjustedHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime) - 1800;
                     } else {
-                        totalNightWaitTime = (currentHours * 60 + parseInt(currentMinutes) + totalTripTime + waitTime - 1380);
-                        document.getElementById('totalWaitNight').innerHTML = totalNightWaitTime;
+                        totalNightWaitTime += waitTime;
                     }
                 }
+
+                document.getElementById('totalWaitNight').innerHTML = totalNightWaitTime;
 
                 document.getElementById('totalWait').innerHTML = totalWaitTime + waitTime;
                 var stepElement = document.createElement("div");
