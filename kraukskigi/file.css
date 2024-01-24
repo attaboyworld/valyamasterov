@@ -1,36 +1,28 @@
 .inputField {
-	font-size: 14px;
+	font-size: 32px;
+	font-family: mindset-regular;
+	text-align: center;
 	background-color: white;
 	border: none;
 	padding: 8px 24px;
-	border-radius: 24px;
 }
 
 .hiScoresContainer {
 	overflow: scroll;
 	font-size: 24px;
-	line-height: 24px;
+	line-height: 4px;
 }
 
 .hiScoresContainer p{
+	width: 90%;
+	font-family: mindset-regular;
 	padding: 4px 8px;
-	background-color: white;
 	border-radius: 12px;
-	margin-bottom: 4px;
-}
-
-p:nth-child(1){
-	background-color: #C9B037;
-}
-
-p:nth-child(2){
-	background-color: #B4B4B4;
-}
-
-p:nth-child(3){
-	background-color: #AD8A56;
+	display: flex;
+	justify-content: space-between;
 }
 
 .userScore{
-	color: green;
+	background-color: #FDD306;
+	line-height: 24px;
 }
