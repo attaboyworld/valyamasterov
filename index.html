@@ -1,84 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>kraukskigiV2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<meta name="generator" content="Scirra Construct">
 
-    <title>valyamasterov</title>
+	<link rel="manifest" href="appmanifest.json">
+	<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+	<link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
+	<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+	<link rel="icon" type="image/png" href="icons/icon-512.png">
+
+<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="file.css">
+
 </head>
 <body>
 
-<div id="mainContainer">
-    <section id="navbar">
-        <div>
-            <a href="">valyamasterov.com</a>
-        </div>
-        <div>
-            <button onclick="showProjects()">Projects & Objects</button>
-            <button onclick="showSound()">Sound</button> 
-            <button onclick="showContacts()">Contacts</button>
-        </div>
-    </section>
-    <section id="projects">
-        <div id="projectContainer">
-            <h2>Catasound</h2>
-            <a href="https://catasound.com"><img src="images/catasound-preview.png"></a>
-            <p>Catasound provides a virtual record-digging experience, allowing you to explore community-created collections, discover new sounds, and organise your personal digital music library.</p>
-            <a href="https://catasound.com">https://catasound.com →</a>
-        </div>
-    </section>
-    <section id="about">
-        test
-    </section>
-    <section id="sound">
-        <iframe width="100%" height="60" src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=%2Fvalyamasterov%2Fnovember-30-2023%2F" frameborder="0" ></iframe>
-        <iframe width="100%" height="60" src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=%2Fvalyamasterov%2Fnovember-19th-2023%2F" frameborder="0" ></iframe>
-    </section>
-    <section id="contacts">
-        <div><img src="images/valya.jpeg"></div>
-        <div>
-                <h2>Instagram</h2>
-                <a href="https://www.instagram.com/valyamasterov/">@valyamasterov</a>
-            <p>
-                <h2>Email</h2>
-                <a href="mailto:valyamasterov@gmail.com">valyamasterov@gmail.com</a>
-            </p>
-        </div>
-    </section>
-</div>
-    
 <script>
-    const showAbout = () => {
-        document.getElementById('projects').style.display = "none";
-        document.getElementById('contacts').style.display = "none";
-        document.getElementById('sound').style.display = "none";
-        document.getElementById('about').style.display = "flex";
-        
-    }
-    const showContacts = () => {
-        document.getElementById('projects').style.display = "none";
-        document.getElementById('sound').style.display = "none";
-        document.getElementById('contacts').style.display = "flex";
-        document.getElementById('about').style.display = "none";
-    }
-    const showProjects = () => {
-        document.getElementById('projects').style.display = "grid";
-        document.getElementById('sound').style.display = "none";
-        document.getElementById('contacts').style.display = "none";
-        document.getElementById('about').style.display = "none";
-    }
-    const showSound = () => {
-        document.getElementById('projects').style.display = "none";
-        document.getElementById('contacts').style.display = "none";
-        document.getElementById('about').style.display = "none";
-        document.getElementById('sound').style.display = "flex";
-    }
+if (location.protocol.substr(0, 4) === "file")
+{
+	alert("Web exports won't work until you upload them. (When running on the file: protocol, browsers block many features from working for security reasons.)");
+}
 </script>
+
+	<noscript>
+		<div id="notSupportedWrap">
+			<h2 id="notSupportedTitle">This content requires JavaScript</h2>
+			<p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+		</div>
+	</noscript>
+	<script src="scripts/supportcheck.js"></script>
+	<script src="scripts/offlineclient.js" type="module"></script>
+	<script src="scripts/main.js" type="module"></script>
+	<script src="scripts/register-sw.js" type="module"></script>
 
 </body>
 </html>
