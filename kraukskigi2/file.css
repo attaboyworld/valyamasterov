@@ -24,9 +24,10 @@
 }
 
 span {
-	max-width: 70%;
+	max-width: 60%;
 	overflow-x: scroll;
 	overflow-y: hidden;
+	text-wrap: nowrap;
 	padding: 4px 16px;
 }
 
