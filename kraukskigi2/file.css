@@ -9,20 +9,28 @@
 
 .hiScoresContainer {
 	overflow: scroll;
-	font-size: 24px;
-	line-height: 4px;
+	font-size: 20px;
+	line-height: 12px;
+	padding: 0px 8px;
 }
 
 .hiScoresContainer p{
-	width: 90%;
+	width: 100%;
 	font-family: mindset-regular;
-	padding: 4px 8px;
 	border-radius: 12px;
 	display: flex;
 	justify-content: space-between;
+	text-wrap: nowrap;
+}
+
+span {
+	max-width: 70%;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	padding: 4px 16px;
 }
 
 .userScore{
 	background-color: #FDD306;
-	line-height: 24px;
+	line-height: 34px;
 }
