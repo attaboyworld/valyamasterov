@@ -21,11 +21,12 @@
 	display: flex;
 	justify-content: space-between;
 	text-wrap: nowrap;
+	opacity: 0.7;
 }
 
 span {
 	max-width: 60%;
-	overflow-x: scroll;
+	overflow-x: hidden;
 	overflow-y: hidden;
 	text-wrap: nowrap;
 	padding: 4px 16px;
@@ -34,4 +35,5 @@ span {
 .userScore{
 	background-color: #FDD306;
 	line-height: 34px;
+	opacity: 1 !important;
 }
