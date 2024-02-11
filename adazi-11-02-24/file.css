@@ -1,0 +1,83 @@
+.inputField {
+	font-size: 24px;
+	font-family: mindset-regular;
+	text-align: center;
+	background-color: #fef7db;
+	border: none;
+	padding: 2px 24px;
+}
+
+.hiScoresContainer {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	font-size: 26px;
+	line-height: 26px;
+	width: 340px;
+	padding-top: 32px;
+	padding-bottom: -24px;
+	position: relative;
+}
+
+#scoreDivider {
+position: absolute;
+left: 0;
+right: 0;
+	margin-left: 250px;
+	background-color: black;
+	z-index: 99;
+	max-width: 4px;
+	height: 1110px;
+	margin-top: -24px;
+	overflow: hidden;
+	opacity: 0.5;
+}
+
+#userScoreDots {
+	margin: -12px 0px;
+}
+
+.hiScoresContainer p{
+	width: 340px;
+	font-family: mindset-regular;
+	border-radius: 24px;
+	display: flex;
+	text-wrap: nowrap;
+	opacity: 0.7;
+	margin-left: 4px;
+	margin-top: -24px;
+}
+
+
+span {
+	height: 24px;
+    min-width: 170px;
+	overflow: hidden;
+	text-wrap: nowrap;
+	padding: 4px 16px;
+}
+
+#score {
+	padding-left: 66px;
+}
+
+.userScore #score {
+	height: 42px !important;
+	padding-left: 62px;
+}
+
+.userScore {
+	opacity: 1 !important;
+	max-width: 320px !important;
+	margin: 0px 10px !important;
+	background-color: rgb(255, 211, 1);
+	border-radius: 24px;
+	line-height: 42px !important;
+		margin-top: -24px;
+	margin-bottom: -24px;
+	z-index: -5 !important;
+}
+
+.userScore #username {
+	height: 42px !important;
+	padding-left: 14px;
+}
