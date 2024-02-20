@@ -19,6 +19,8 @@ loadCarData = () => {
     var waitTime = parseInt(document.getElementById("totalWait").innerHTML);
     var totalNightWaitTime = parseInt(document.getElementById("totalWaitNight").innerHTML);
 
+    // this is used to remove duplicates later on
+    var cityBeeCarsSaved = [];
 
     carData.forEach(element => {
         
@@ -51,6 +53,135 @@ loadCarData = () => {
         var minimumTripPrice = parseFloat(element.MinimumTripPrice);
         var tripStartFee = parseFloat(element.TripStartFee);
 
+        // Citybee Calculations
+
+        if (company === "Citybee" && carModel !== "Toyota Yaris Cross" && carModel !== "VW T-Roc" && carModel !== "Toyota Rav4" && carModel !== "Hyundai i20" && carModel !== "Renault Clio" && carModel !== "Skoda Fabia" && carModel !== "Toyota Yaris" && carModel !== "Renault Captur" && carModel !== "Renault Captur" && carModel !== "Toyota Corolla Crossover" && carModel !== "VW Tiguan Diesel" && carModel !== "Nissan Juke" && carModel !== "MAN TGE") {
+
+            // Citybee hardcoded prices
+            if (carModel === "VW T-Cross" || carModel === "Seat Ateca" || carModel === "Opel Crossland" || carModel === "VW Taigo" || carModel === "Toyota C-HR" || carModel === "Opel Mokka" || carModel === "Ford Focus Wagon" || carModel === "Ford Puma" || carModel === "Peugeot 308" || carModel === "Ford Focus" || carModel === "Toyota Corolla" || carModel === "Toyota Corolla Touring" || carModel === "Renault Arkana" || carModel === "Skoda Kamiq") {
+                min1 = 0.12; h1 = 4.99; day1 = 19.99; km1 = 0.26;
+            } else if (carModel === "Nissan Qashqai" || carModel === "Jeep Compass" || carModel === "VW T-Roc R-Line" || carModel === "BMW 118i" || carModel === "Ford Kuga" || carModel === "Skoda Karoq") {
+                min1 = 0.17; h1 = 6.99; day1 = 23.99; km1 = 0.28;
+            } else if (carModel === "Kia Sportage" || carModel === "VW Tiguan") {
+                min1 = 0.22; h1 = 11.99; day1 = 39.99; km1 = 0.29;
+            } else if (carModel === "Renault Master" || carModel === "Ford Transit") {
+                min1 = 0.16; h1 = 8.90; day1 = 39.90; km1 = 0.28;
+            }
+            
+            var calcBreakDown = "";
+            var totalTime = time + waitTime;
+            minimumTripPrice = 2.29;
+            tripStartFee = 0.50;
+            tariffName = "Pay as you go";
+
+            if (((day1) / h1) * 60 <= totalTime && day1 < h1 * 5 + (totalTime - 300) * min1) {
+                ridePrice = tripStartFee + day1 + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 1 Day (" + day1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
+                ridePrice = tripStartFee + (h1 * 5) + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 300) {
+                    ridePrice += min1 * (totalTime - 300);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
+                } 
+            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
+                ridePrice = tripStartFee + (h1 * 4) + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 240) {
+                    ridePrice += min1 * (totalTime - 240);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
+                } 
+            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
+                ridePrice = tripStartFee + (h1 * 3) + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 180) {
+                    ridePrice += min1 * (totalTime - 180);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
+                } 
+            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                ridePrice = tripStartFee + (h1 * 2) + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 120) {
+                    ridePrice += min1 * (totalTime - 120);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
+                } 
+            } else if (h1 / min1 <= totalTime) {
+                ridePrice = tripStartFee + h1 + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 60) {
+                    ridePrice += min1 * (totalTime - 60);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
+                }
+            } else {
+                ridePrice = tripStartFee + (totalTime * min1) + (distance * km1);
+                calcBreakDown = "Trip start fee (0.50€) + (" + totalTime + "min" + " * " + min1 + "€) + (" + distance + "km" + " * " + km1 + "€)";
+            }
+            if (ridePrice < minimumTripPrice) {
+                ridePrice = minimumTripPrice;
+                calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
+            }
+
+            if (!cityBeeCarsSaved.includes(carModel)) {
+                calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
+                cityBeeCarsSaved.push(carModel);
+            }
+        }
+
+        // Bolt Drive Price Calculations
+        if (company === "Bolt Drive") {
+
+            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
+            var totalTime = time + waitTime;
+            var calcBreakDown = "";
+
+            if (((day1) / h1) * 60 <= totalTime && day1 < h1 * 5 + (totalTime - 300) * min1) {
+                ridePrice = day1 + (distance * km1);
+                calcBreakDown = "1 Day (" + day1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
+                ridePrice = (h1 * 5) + (distance * km1);
+                calcBreakDown = "5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 300) {
+                    ridePrice += min1 * (totalTime - 300);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
+                }
+            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
+                ridePrice = (h1 * 4) + (distance * km1);
+                calcBreakDown = "4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 240) {
+                    ridePrice += min1 * (totalTime - 240);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
+                }
+            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
+                ridePrice = (h1 * 3) + (distance * km1);
+                calcBreakDown = "3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 180) {
+                    ridePrice += min1 * (totalTime - 180);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
+                }
+            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                ridePrice = (h1 * 2) + (distance * km1);
+                calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 120) {
+                    ridePrice += min1 * (totalTime - 120);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
+                }
+            } else if (h1 / min1 <= totalTime) {
+                ridePrice = h1 + (distance * km1);
+                calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
+                if (totalTime > 60) {
+                    ridePrice += min1 * (totalTime - 60);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
+                }
+            } else {
+                ridePrice = (totalTime * min1) + (distance * km1);
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance + "km" + " * " + km1 + "€)";
+            }
+            if (ridePrice < minimumTripPrice) {
+                ridePrice = minimumTripPrice;
+                calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
+            }
+            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
+        }
 
         // Carguru Price Calculations
         if (company === "Carguru") {
@@ -182,61 +313,7 @@ loadCarData = () => {
             }
         }
 
-        // Bolt Drive Price Calculations
-        if (company === "Bolt Drive") {
-
-            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
-            var totalTime = time + waitTime;
-            var calcBreakDown = "";
-
-            if (((day1) / h1) * 60 <= totalTime && h1 * 6 < h1 * 5 + (totalTime - 300) * min1) {
-                ridePrice = day1 + (distance * km1);
-                calcBreakDown = "1 Day (" + day1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 240) * min1) {
-                ridePrice = (h1 * 5) + (distance * km1);
-                calcBreakDown = "5 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-                if (totalTime > 300) {
-                    ridePrice += min1 * (totalTime - 300);
-                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
-                }
-            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
-                ridePrice = (h1 * 4) + (distance * km1);
-                calcBreakDown = "4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-                if (totalTime > 240) {
-                    ridePrice += min1 * (totalTime - 240);
-                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
-                }
-            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
-                ridePrice = (h1 * 3) + (distance * km1);
-                calcBreakDown = "3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-                if (totalTime > 180) {
-                    ridePrice += min1 * (totalTime - 180);
-                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
-                }
-            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
-                ridePrice = (h1 * 2) + (distance * km1);
-                calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-                if (totalTime > 120) {
-                    ridePrice += min1 * (totalTime - 120);
-                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
-                }
-            } else if (h1 / min1 <= totalTime) {
-                ridePrice = h1 + (distance * km1);
-                calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
-                if (totalTime > 60) {
-                    ridePrice += min1 * (totalTime - 60);
-                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
-                }
-            } else {
-                ridePrice = (totalTime * min1) + (distance * km1);
-                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + distance + "km" + " * " + km1 + "€)";
-            }
-            if (ridePrice < minimumTripPrice) {
-                ridePrice = minimumTripPrice;
-                calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
-            }
-            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
-        }
+        
 
         // OXDrive Price Calculations
         if (company === "OXDrive") {
@@ -321,6 +398,8 @@ loadCarData = () => {
     // loading images
     for (let i = 0; i < sortedCarPrices.length; i++) {
         var carImageDisplay = "";
+        var logoImageDisplay = "";
+
         switch(sortedCarPrices[i][2]){
                 case "Toyota Yaris": carImageDisplay = "<img src=" + "images/cars/toyota-yaris.png" + ">"; break;
                 case "Audi A1": carImageDisplay = "<img src=" + "images/cars/audi-a1.png" + ">"; break;
@@ -357,14 +436,44 @@ loadCarData = () => {
                 case "Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
                 case "Model S Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
                 case "Model X Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-x.png" + ">"; break;
+                case "Skoda Kamiq": carImageDisplay = "<img src=" + "images/cars/skoda-kamiq.png" + ">"; break;
+                case "BMW 118i": carImageDisplay = "<img src=" + "images/cars/bmw-118i.png" + ">"; break;
+                case "Jeep Compass": carImageDisplay = "<img src=" + "images/cars/jeep-compass.png" + ">"; break;
+                case "Ford Focus Wagon": carImageDisplay = "<img src=" + "images/cars/ford-focus-wagon.png" + ">"; break;
+                case "Ford Focus": carImageDisplay = "<img src=" + "images/cars/ford-focus.png" + ">"; break;
+                case "VW Taigo": carImageDisplay = "<img src=" + "images/cars/vw-taigo.png" + ">"; break;
+                case "Seat Ateca": carImageDisplay = "<img src=" + "images/cars/seat-ateca.png" + ">"; break;
+                case "Peugeot 308": carImageDisplay = "<img src=" + "images/cars/peugeot-308.png" + ">"; break;
+                case "Skoda Karoq": carImageDisplay = "<img src=" + "images/cars/skoda-karoq.png" + ">"; break;
+                case "Ford Puma": carImageDisplay = "<img src=" + "images/cars/ford-puma.png" + ">"; break;
+                case "Toyota Corolla Touring": carImageDisplay = "<img src=" + "images/cars/toyota-corolla-touring.png" + ">"; break;
+                case "Opel Mokka": carImageDisplay = "<img src=" + "images/cars/opel-mokka.png" + ">"; break;
+                case "VW T-Roc R-Line": carImageDisplay = "<img src=" + "images/cars/vw-t-roc-r-line.png" + ">"; break;
+                case "Kia Sportage": carImageDisplay = "<img src=" + "images/cars/kia-sportage.png" + ">"; break;
+                case "Ford Kuga": carImageDisplay = "<img src=" + "images/cars/ford-kuga.png" + ">"; break;
+                case "Renault Arkana": carImageDisplay = "<img src=" + "images/cars/renault-arkana.png" + ">"; break;
+                case "VW Tiguan": carImageDisplay = "<img src=" + "images/cars/vw-tiguan.png" + ">"; break;
+                case "Renault Master": carImageDisplay = "<img src=" + "images/cars/renault-master.png" + ">"; break;
+                case "Ford Transit": carImageDisplay = "<img src=" + "images/cars/ford-transit.png" + ">"; break;
         }
+
+        switch(sortedCarPrices[i][1]){
+            case "Carguru": logoImageDisplay = "<img src=" + "images/logos/carguru-logo.png" + ">"; break;
+            case "Citybee": logoImageDisplay = "<img src=" + "images/logos/citybee-logo.png" + ">"; break;
+            case "Bolt Drive": logoImageDisplay = "<img src=" + "images/logos/bolt-logo.png" + ">"; break;
+            case "OXDrive": logoImageDisplay = "<img src=" + "images/logos/oxdrive-logo.png" + ">"; break;
+            case "Beast": logoImageDisplay = "<img src=" + "images/logos/beast-logo.png" + ">"; break;
+
+        }
+
+
 
         const resultCard = document.createElement("div");
         resultCard.setAttribute("class", "resultOutputCard");
 
         resultCard.innerHTML = 
-        '<div class="carImage">' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '</div>' + '</div>'
-        + '<div class="carInfo">' + '<p>' + sortedCarPrices[i][1] + '<br>' + "<span> (" + sortedCarPrices[i][3] + ')<br></span>' + sortedCarPrices[i][2] + '<br><br> <b>EUR ' + sortedCarPrices[i][0] + '</b></p>' + '<div class="priceBreakdown">' + sortedCarPrices[i][6] + '</div></div>';
+        '<div class="carImage">' + '<p id="carModel">' + sortedCarPrices[i][2] + '</p>' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '<div class="tag" style="background-color: #04080F;">' + sortedCarPrices[i][3] + '</div>' + '</div>' + '</div>'
+        + '<div class="carInfo">' + '<div class="serviceLogo">' + logoImageDisplay + '</div>' + "<p>" + '<b><span id="price">' + sortedCarPrices[i][0] + '€</span></b></p>' + '<div class="priceBreakdown">' + sortedCarPrices[i][6] + '</div></div>';
         
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);

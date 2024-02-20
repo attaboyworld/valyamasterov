@@ -1,12 +1,16 @@
 body {
     padding: 0px 1%;
     font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0;
+    background-color: #d9dbdb;
+    color: #04080F;
 }
 
 #projectContainer {
@@ -18,12 +22,17 @@ body {
 }
 
 h1 {
-
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 42px;
 }
 
 h2 {
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
     margin: 0;
-    font-size: 21px;
+    font-size: 28px;
 }
 
 p {
@@ -33,30 +42,35 @@ p {
 input[type="text"], input[type="number"] {
     border-radius: 0px;
     border: 1px black solid;
-    font-family: 'DM Sans', sans-serif;
-    background-color: #F6F6F6;
-    padding: 5px 14px;
-    border-radius: 28px;
+    font-family: "Roboto", sans-serif;
+    padding: 8px 22px;
+    border-radius: 24px;
 }
 
 button {
     min-width: 98px;
-    min-height: 28px;
-    border-radius: 28px;
-    border: 1px black solid;
+    min-height: 34px;
+    border-radius: 24px;
+    border: 0px;
     padding: 2px 14px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     cursor: pointer;
+    background-color: #FF4A1C;
 }
 
 #getCurrent {
-    background-color: white;
-    border: none;
-    color: blue;
-    text-align: left;
-    padding-left: 0;
-    padding-right: 0;
-    font-size: 10px;
+    text-wrap: nowrap;
+    width: 50%;
+    border: 1px #FF4A1C solid;
+    color: #FF4A1C;
+    background-color: #ffffff;
+}
+
+#addButton {
+    border: 1px #FF4A1C solid;
+    background-color: #ffffff;
+    color: #FF4A1C;
 }
 
 .stepInput button {
@@ -65,11 +79,13 @@ button {
 }
 
 #routePlannerContainer {
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 21px;
+    margin-top: 12px;
+    background-color: #ffffff;
+    padding: 32px 32px;
+    border-radius: 24px;
 }
 
 #route {
@@ -81,29 +97,31 @@ button {
 }
 
 #result td {
-    background-color: #F6F6F6;
+    background-color: #ffffff;
     padding: 7px;
 }
 
 #result button {
     margin-top: 28px;
-    margin-bottom: 28px;
     height: 42px;
     width: 100%;
+    color: #FFFFFF;
+
 }
 
 #resultContainer {
     width: 100%;
+    margin-bottom: 64px;
 }
 
 .resultOutputCard {
-    background-color: #F6F6F6;
+    background-color: #ffffff;
+    padding: 32px 32px;
+    border-radius: 24px;
     display: flex;
     width: auto;
     justify-content: space-between;
-    align-items: center;
-    border-radius: 28px;
-    padding: 21px;
+    align-items: top;
     margin-top: 21px;
 }
 
@@ -119,15 +137,11 @@ button {
 }
 
 .carInfo {
-    display: flex;
-    flex-direction: column;
     width: 37%;
     height: auto;
-}
-
-.carInfo p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 21px;
+    text-align: center;
 }
 
 .stepElement {
@@ -168,10 +182,14 @@ button {
 table {
     text-align: left;
     width: 100%;
+    border-radius: 24px;
+    padding: 12px 24px;
+    background-color: #f7f7f7;
 }
 
 td {
-    padding: 7px 7px 7px 0px;
+    border-radius: 24px;
+    background-color: #f7f7f7 !important;
 }
 
 .dot {
@@ -191,64 +209,66 @@ td {
     border-left: 2px dotted black;
 }
 
+#editTime {
+    color: #FF4A1C;
+}
+
 #datetimepicker {
     display: none;
 }
 
 .tag {
-    background-color: blue;
+    background-color: #FF4A1C;
     color: white;
     border-radius: 28px;
     padding: 14px 14px;
     font-size: 10px;
     line-height: 0;
     text-align: center;
+    text-wrap: nowrap;
 }
 
 .tagContainer {
-    width: 100%;
     display: flex;
     flex-direction: row;
     row-gap: 8px;
     column-gap: 8px;
     justify-content: left;
-    flex-wrap: wrap;
-}
-
-#tripTypeMenu {
-    width: 100%;
-    height: 42px;
-    border-radius: 42px;
-    background-color: #F6F6F6;
-    margin-bottom: 21px;
-    display: flex;
-}
-
-.tripMenuButton {
-    width: 50%;
-    height: 100%;
-    border-radius: 42px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-}
-
-.tripMenuButtonSelected {
-    width: 50%;
-    height: 100%;
-    border-radius: 42px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    background-color: #dadada;
+    overflow: visible;
 }
 
 .priceBreakdown {
+    margin-top: -12px;
     font-size: 10px;
 }
 
 #totalWaitNight {
     display: none;
+}
+
+.serviceLogo img{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -1%;
+    width: 100%;
+    height: auto;
+}
+
+.carInfo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#carModel {
+    font-size: 24px;
+    margin-top: 6px;
+    margin-bottom: 0px;
+}
+
+#price {
+    font-size: 32px;
+    color: #FF4A1C;
 }
