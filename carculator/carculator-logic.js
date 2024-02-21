@@ -23,7 +23,7 @@ loadCarData = () => {
     var cityBeeCarsSaved = [];
 
     carData.forEach(element => {
-        
+
         // values from car data JSON file
         var company = element.Company;
         var carModel = element.CarModel;
@@ -52,6 +52,12 @@ loadCarData = () => {
         var waitTime1MinNightTime = parseFloat(element.WaitTime1MinNightTime);
         var minimumTripPrice = parseFloat(element.MinimumTripPrice);
         var tripStartFee = parseFloat(element.TripStartFee);
+
+        if (company === "OXDrive" || company === "Beast") {
+            if (carModel !== "Tesla Model 3 Standard Range +") {
+                carModel = "Tesla " + carModel;
+            }
+        }
 
         // Citybee Calculations
 
@@ -427,15 +433,15 @@ loadCarData = () => {
                 case "VW Passat": carImageDisplay = "<img src=" + "images/cars/vw-passat.png" + ">"; break;
                 case "Nissan Juke": carImageDisplay = "<img src=" + "images/cars/nissan-juke.png" + ">"; break;
                 case "Tesla Model 3 Standard Range +": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Model 3 Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Model 3 Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Model Y Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Model Y Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Model S Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
-                case "Model S Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
-                case "Model X Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-x.png" + ">"; break;
+                case "Tesla Model 3 Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
+                case "Tesla Model 3 Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
+                case "Tesla Model Y Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+                case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+                case "Tesla Model Y Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+                case "Tesla Model S Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+                case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
+                case "Tesla Model S Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
+                case "Tesla Model X Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-x.png" + ">"; break;
                 case "Skoda Kamiq": carImageDisplay = "<img src=" + "images/cars/skoda-kamiq.png" + ">"; break;
                 case "BMW 118i": carImageDisplay = "<img src=" + "images/cars/bmw-118i.png" + ">"; break;
                 case "Jeep Compass": carImageDisplay = "<img src=" + "images/cars/jeep-compass.png" + ">"; break;
@@ -471,9 +477,9 @@ loadCarData = () => {
         const resultCard = document.createElement("div");
         resultCard.setAttribute("class", "resultOutputCard");
 
-        resultCard.innerHTML = 
-        '<div class="carImage">' + '<p id="carModel">' + sortedCarPrices[i][2] + '</p>' + carImageDisplay + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '<div class="tag" style="background-color: #04080F;">' + sortedCarPrices[i][3] + '</div>' + '</div>' + '</div>'
-        + '<div class="carInfo">' + '<div class="serviceLogo">' + logoImageDisplay + '</div>' + "<p>" + '<b><span id="price">' + sortedCarPrices[i][0] + '€</span></b></p>' + '<div class="priceBreakdown">' + sortedCarPrices[i][6] + '</div></div>';
+        resultCard.innerHTML = '<div class="resultHeader">' + '<p class="carModel">' + sortedCarPrices[i][2] + '</p>' + '<div class="serviceLogo">' + logoImageDisplay + '</div>' + '</div>' 
+        + '<div class="resultBody">' + '<div class="carImage">' + carImageDisplay + '</div>' + '<div class="carPrice">' + '<p class="price">' + sortedCarPrices[i][0] + '€</p>' + '<p class="breakdown">' + sortedCarPrices[i][6] + '</p>' + '</div>' + '</div>' 
+        + '<div class="resultFooter">' + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '<div class="packageTag">' + sortedCarPrices[i][3] + '</div>' + '</div>' + '</div>';
         
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);
