@@ -73,7 +73,7 @@ loadCarData = () => {
             } else if (carModel === "Renault Master" || carModel === "Ford Transit") {
                 min1 = 0.16; h1 = 8.90; day1 = 39.90; km1 = 0.28;
             }
-            
+
             var calcBreakDown = "";
             var totalTime = time + waitTime;
             minimumTripPrice = 2.29;
@@ -89,28 +89,28 @@ loadCarData = () => {
                 if (totalTime > 300) {
                     ridePrice += min1 * (totalTime - 300);
                     calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
-                } 
+                }
             } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 180) * min1) {
                 ridePrice = tripStartFee + (h1 * 4) + (distance * km1);
                 calcBreakDown = "Trip start fee (0.50€) + 4 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 240) {
                     ridePrice += min1 * (totalTime - 240);
                     calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
-                } 
+                }
             } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 120) * min1) {
                 ridePrice = tripStartFee + (h1 * 3) + (distance * km1);
                 calcBreakDown = "Trip start fee (0.50€) + 3 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 180) {
                     ridePrice += min1 * (totalTime - 180);
                     calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
-                } 
+                }
             } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                 ridePrice = tripStartFee + (h1 * 2) + (distance * km1);
                 calcBreakDown = "Trip start fee (0.50€) + 2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                 if (totalTime > 120) {
                     ridePrice += min1 * (totalTime - 120);
                     calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
-                } 
+                }
             } else if (h1 / min1 <= totalTime) {
                 ridePrice = tripStartFee + h1 + (distance * km1);
                 calcBreakDown = "Trip start fee (0.50€) + 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
@@ -203,7 +203,7 @@ loadCarData = () => {
                 } else {
                     adjustedDistance = 0;
                 }
-                
+
                 if ((day1 * 180) / h3 <= totalTime && day1 < h3 + h1 * 2 + (totalTime - 300) * min1) {
                     ridePrice = day1 + (adjustedDistance * km1);
                     calcBreakDown = "1 Day (" + day1 + "€) + " + "(" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)" + "<br>¹<i>Daily 100km included in tariff</i>";
@@ -229,7 +229,7 @@ loadCarData = () => {
                     if (totalTime > 180) {
                         ridePrice += min1 * (totalTime - 180);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
-                    } 
+                    }
                     calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
                 } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                     ridePrice = (h1 * 2) + (adjustedDistance * km1);
@@ -237,7 +237,7 @@ loadCarData = () => {
                     if (totalTime > 120) {
                         ridePrice += min1 * (totalTime - 120);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
-                    } 
+                    }
                     calcBreakDown += "<br>¹<i>Daily 100km included in tariff</i>";
                 } else if (h1 / min1 <= totalTime) {
                     ridePrice = h1 + (adjustedDistance * km1);
@@ -251,7 +251,7 @@ loadCarData = () => {
                     ridePrice = (totalTime * min1) + (adjustedDistance * km1);
                     calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€) + (" + adjustedDistance.toFixed() + "km¹" + " * " + km1 + "€)<br>¹<i>Daily 100km included in tariff</i>";
                 }
-                
+
                 if (totalNightWaitTime > 0) {
                     calcBreakDown += "<br>Free Night Time Wait (" + totalNightWaitTime + "min)";
                 }
@@ -287,14 +287,14 @@ loadCarData = () => {
                     if (totalTime > 180) {
                         ridePrice += min1 * (totalTime - 180);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
-                    } 
+                    }
                 } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
                     ridePrice = (h1 * 2) + (distance * km1);
                     calcBreakDown = "2 * 1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
                     if (totalTime > 120) {
                         ridePrice += min1 * (totalTime - 120);
                         calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
-                    } 
+                    }
                 } else if (h1 / min1 <= totalTime) {
                     ridePrice = h1 + (distance * km1);
                     calcBreakDown = "1 Hour (" + h1 + "€)" + " + (" + distance.toFixed() + "km" + " * " + km1 + "€)";
@@ -319,7 +319,7 @@ loadCarData = () => {
             }
         }
 
-        
+
 
         // OXDrive Price Calculations
         if (company === "OXDrive") {
@@ -406,64 +406,64 @@ loadCarData = () => {
         var carImageDisplay = "";
         var logoImageDisplay = "";
 
-        switch(sortedCarPrices[i][2]){
-                case "Toyota Yaris": carImageDisplay = "<img src=" + "images/cars/toyota-yaris.png" + ">"; break;
-                case "Audi A1": carImageDisplay = "<img src=" + "images/cars/audi-a1.png" + ">"; break;
-                case "Peugot 208": carImageDisplay = "<img src=" + "images/cars/peugeot-208.png" + ">"; break;
-                case "Skoda Fabia": carImageDisplay = "<img src=" + "images/cars/skoda-fabia.png" + ">"; break;
-                case "Toyota Corolla": carImageDisplay = "<img src=" + "images/cars/toyota-corolla.png" + ">"; break;
-                case "Audi A3": carImageDisplay = "<img src=" + "images/cars/audi-a3.png" + ">"; break;
-                case "Hyundai Bayon": carImageDisplay = "<img src=" + "images/cars/hyundai-bayon.png" + ">"; break;
-                case "Peugeot 2008": carImageDisplay = "<img src=" + "images/cars/peugeot-2008.png" + ">"; break;
-                case "Audi Q2": carImageDisplay = "<img src=" + "images/cars/audi-q2.png" + ">"; break;
-                case "Toyota Yaris Cross": carImageDisplay = "<img src=" + "images/cars/toyota-yaris-cross.png" + ">"; break;
-                case "VW T-Cross": carImageDisplay = "<img src=" + "images/cars/vw-t-cross.png" + ">"; break;
-                case "Toyota C-HR": carImageDisplay = "<img src=" + "images/cars/toyota-c-hr.png" + ">"; break;
-                case "Opel Crossland": carImageDisplay = "<img src=" + "images/cars/opel-crossland.png" + ">"; break;
-                case "Audi A5": carImageDisplay = "<img src=" + "images/cars/audi-a5.png" + ">"; break;
-                case "Audi A4": carImageDisplay = "<img src=" + "images/cars/audi-a4.png" + ">"; break;
-                case "Audi A4": carImageDisplay = "<img src=" + "images/cars/audi-a4.png" + ">"; break;
-                case "BMW 4 Convertible": carImageDisplay = "<img src=" + "images/cars/bmw-4-convertible.png" + ">"; break;
-                case "VW T-Roc Cabrio": carImageDisplay = "<img src=" + "images/cars/vw-t-roc-cabrio.png" + ">"; break;
-                case "Audi e-tron": carImageDisplay = "<img src=" + "images/cars/audi-e-tron.png" + ">"; break;
-                case "Toyota Land Cruiser": carImageDisplay = "<img src=" + "images/cars/toyota-land-cruiser.png" + ">"; break;
-                case "VW Crafter": carImageDisplay = "<img src=" + "images/cars/vw-crafter.png" + ">"; break;
-                case "Toyota Rav4": carImageDisplay = "<img src=" + "images/cars/toyota-rav4.png" + ">"; break;
-                case "Nissan Qashqai": carImageDisplay = "<img src=" + "images/cars/nissan-qashqai.png" + ">"; break;
-                case "VW Passat": carImageDisplay = "<img src=" + "images/cars/vw-passat.png" + ">"; break;
-                case "Nissan Juke": carImageDisplay = "<img src=" + "images/cars/nissan-juke.png" + ">"; break;
-                case "Tesla Model 3 Standard Range +": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Tesla Model 3 Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Tesla Model 3 Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
-                case "Tesla Model Y Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Tesla Model Y Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Tesla Model S Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
-                case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
-                case "Tesla Model S Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
-                case "Tesla Model X Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-x.png" + ">"; break;
-                case "Skoda Kamiq": carImageDisplay = "<img src=" + "images/cars/skoda-kamiq.png" + ">"; break;
-                case "BMW 118i": carImageDisplay = "<img src=" + "images/cars/bmw-118i.png" + ">"; break;
-                case "Jeep Compass": carImageDisplay = "<img src=" + "images/cars/jeep-compass.png" + ">"; break;
-                case "Ford Focus Wagon": carImageDisplay = "<img src=" + "images/cars/ford-focus-wagon.png" + ">"; break;
-                case "Ford Focus": carImageDisplay = "<img src=" + "images/cars/ford-focus.png" + ">"; break;
-                case "VW Taigo": carImageDisplay = "<img src=" + "images/cars/vw-taigo.png" + ">"; break;
-                case "Seat Ateca": carImageDisplay = "<img src=" + "images/cars/seat-ateca.png" + ">"; break;
-                case "Peugeot 308": carImageDisplay = "<img src=" + "images/cars/peugeot-308.png" + ">"; break;
-                case "Skoda Karoq": carImageDisplay = "<img src=" + "images/cars/skoda-karoq.png" + ">"; break;
-                case "Ford Puma": carImageDisplay = "<img src=" + "images/cars/ford-puma.png" + ">"; break;
-                case "Toyota Corolla Touring": carImageDisplay = "<img src=" + "images/cars/toyota-corolla-touring.png" + ">"; break;
-                case "Opel Mokka": carImageDisplay = "<img src=" + "images/cars/opel-mokka.png" + ">"; break;
-                case "VW T-Roc R-Line": carImageDisplay = "<img src=" + "images/cars/vw-t-roc-r-line.png" + ">"; break;
-                case "Kia Sportage": carImageDisplay = "<img src=" + "images/cars/kia-sportage.png" + ">"; break;
-                case "Ford Kuga": carImageDisplay = "<img src=" + "images/cars/ford-kuga.png" + ">"; break;
-                case "Renault Arkana": carImageDisplay = "<img src=" + "images/cars/renault-arkana.png" + ">"; break;
-                case "VW Tiguan": carImageDisplay = "<img src=" + "images/cars/vw-tiguan.png" + ">"; break;
-                case "Renault Master": carImageDisplay = "<img src=" + "images/cars/renault-master.png" + ">"; break;
-                case "Ford Transit": carImageDisplay = "<img src=" + "images/cars/ford-transit.png" + ">"; break;
+        switch (sortedCarPrices[i][2]) {
+            case "Toyota Yaris": carImageDisplay = "<img src=" + "images/cars/toyota-yaris.png" + ">"; break;
+            case "Audi A1": carImageDisplay = "<img src=" + "images/cars/audi-a1.png" + ">"; break;
+            case "Peugot 208": carImageDisplay = "<img src=" + "images/cars/peugeot-208.png" + ">"; break;
+            case "Skoda Fabia": carImageDisplay = "<img src=" + "images/cars/skoda-fabia.png" + ">"; break;
+            case "Toyota Corolla": carImageDisplay = "<img src=" + "images/cars/toyota-corolla.png" + ">"; break;
+            case "Audi A3": carImageDisplay = "<img src=" + "images/cars/audi-a3.png" + ">"; break;
+            case "Hyundai Bayon": carImageDisplay = "<img src=" + "images/cars/hyundai-bayon.png" + ">"; break;
+            case "Peugeot 2008": carImageDisplay = "<img src=" + "images/cars/peugeot-2008.png" + ">"; break;
+            case "Audi Q2": carImageDisplay = "<img src=" + "images/cars/audi-q2.png" + ">"; break;
+            case "Toyota Yaris Cross": carImageDisplay = "<img src=" + "images/cars/toyota-yaris-cross.png" + ">"; break;
+            case "VW T-Cross": carImageDisplay = "<img src=" + "images/cars/vw-t-cross.png" + ">"; break;
+            case "Toyota C-HR": carImageDisplay = "<img src=" + "images/cars/toyota-c-hr.png" + ">"; break;
+            case "Opel Crossland": carImageDisplay = "<img src=" + "images/cars/opel-crossland.png" + ">"; break;
+            case "Audi A5": carImageDisplay = "<img src=" + "images/cars/audi-a5.png" + ">"; break;
+            case "Audi A4": carImageDisplay = "<img src=" + "images/cars/audi-a4.png" + ">"; break;
+            case "Audi A4": carImageDisplay = "<img src=" + "images/cars/audi-a4.png" + ">"; break;
+            case "BMW 4 Convertible": carImageDisplay = "<img src=" + "images/cars/bmw-4-convertible.png" + ">"; break;
+            case "VW T-Roc Cabrio": carImageDisplay = "<img src=" + "images/cars/vw-t-roc-cabrio.png" + ">"; break;
+            case "Audi e-tron": carImageDisplay = "<img src=" + "images/cars/audi-e-tron.png" + ">"; break;
+            case "Toyota Land Cruiser": carImageDisplay = "<img src=" + "images/cars/toyota-land-cruiser.png" + ">"; break;
+            case "VW Crafter": carImageDisplay = "<img src=" + "images/cars/vw-crafter.png" + ">"; break;
+            case "Toyota Rav4": carImageDisplay = "<img src=" + "images/cars/toyota-rav4.png" + ">"; break;
+            case "Nissan Qashqai": carImageDisplay = "<img src=" + "images/cars/nissan-qashqai.png" + ">"; break;
+            case "VW Passat": carImageDisplay = "<img src=" + "images/cars/vw-passat.png" + ">"; break;
+            case "Nissan Juke": carImageDisplay = "<img src=" + "images/cars/nissan-juke.png" + ">"; break;
+            case "Tesla Model 3 Standard Range +": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
+            case "Tesla Model 3 Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
+            case "Tesla Model 3 Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-3.png" + ">"; break;
+            case "Tesla Model Y Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+            case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+            case "Tesla Model Y Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+            case "Tesla Model S Standard Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-y.png" + ">"; break;
+            case "Tesla Model Y Long Range": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
+            case "Tesla Model S Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-s.png" + ">"; break;
+            case "Tesla Model X Performance": carImageDisplay = "<img src=" + "images/cars/tesla-model-x.png" + ">"; break;
+            case "Skoda Kamiq": carImageDisplay = "<img src=" + "images/cars/skoda-kamiq.png" + ">"; break;
+            case "BMW 118i": carImageDisplay = "<img src=" + "images/cars/bmw-118i.png" + ">"; break;
+            case "Jeep Compass": carImageDisplay = "<img src=" + "images/cars/jeep-compass.png" + ">"; break;
+            case "Ford Focus Wagon": carImageDisplay = "<img src=" + "images/cars/ford-focus-wagon.png" + ">"; break;
+            case "Ford Focus": carImageDisplay = "<img src=" + "images/cars/ford-focus.png" + ">"; break;
+            case "VW Taigo": carImageDisplay = "<img src=" + "images/cars/vw-taigo.png" + ">"; break;
+            case "Seat Ateca": carImageDisplay = "<img src=" + "images/cars/seat-ateca.png" + ">"; break;
+            case "Peugeot 308": carImageDisplay = "<img src=" + "images/cars/peugeot-308.png" + ">"; break;
+            case "Skoda Karoq": carImageDisplay = "<img src=" + "images/cars/skoda-karoq.png" + ">"; break;
+            case "Ford Puma": carImageDisplay = "<img src=" + "images/cars/ford-puma.png" + ">"; break;
+            case "Toyota Corolla Touring": carImageDisplay = "<img src=" + "images/cars/toyota-corolla-touring.png" + ">"; break;
+            case "Opel Mokka": carImageDisplay = "<img src=" + "images/cars/opel-mokka.png" + ">"; break;
+            case "VW T-Roc R-Line": carImageDisplay = "<img src=" + "images/cars/vw-t-roc-r-line.png" + ">"; break;
+            case "Kia Sportage": carImageDisplay = "<img src=" + "images/cars/kia-sportage.png" + ">"; break;
+            case "Ford Kuga": carImageDisplay = "<img src=" + "images/cars/ford-kuga.png" + ">"; break;
+            case "Renault Arkana": carImageDisplay = "<img src=" + "images/cars/renault-arkana.png" + ">"; break;
+            case "VW Tiguan": carImageDisplay = "<img src=" + "images/cars/vw-tiguan.png" + ">"; break;
+            case "Renault Master": carImageDisplay = "<img src=" + "images/cars/renault-master.png" + ">"; break;
+            case "Ford Transit": carImageDisplay = "<img src=" + "images/cars/ford-transit.png" + ">"; break;
         }
 
-        switch(sortedCarPrices[i][1]){
+        switch (sortedCarPrices[i][1]) {
             case "Carguru": logoImageDisplay = "<img src=" + "images/logos/carguru-logo.png" + ">"; break;
             case "Citybee": logoImageDisplay = "<img src=" + "images/logos/citybee-logo.png" + ">"; break;
             case "Bolt Drive": logoImageDisplay = "<img src=" + "images/logos/bolt-logo.png" + ">"; break;
@@ -477,10 +477,10 @@ loadCarData = () => {
         const resultCard = document.createElement("div");
         resultCard.setAttribute("class", "resultOutputCard");
 
-        resultCard.innerHTML = '<div class="resultHeader">' + '<p class="carModel">' + sortedCarPrices[i][2] + '</p>' + '<div class="serviceLogo">' + logoImageDisplay + '</div>' + '</div>' 
-        + '<div class="resultBody">' + '<div class="carImage">' + carImageDisplay + '</div>' + '<div class="carPrice">' + '<p class="price">' + sortedCarPrices[i][0] + '€</p>' + '<p class="breakdown">' + sortedCarPrices[i][6] + '</p>' + '</div>' + '</div>' 
-        + '<div class="resultFooter">' + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '<div class="packageTag">' + sortedCarPrices[i][3] + '</div>' + '</div>' + '</div>';
-        
+        resultCard.innerHTML = '<div class="resultHeader">' + '<p class="carModel">' + sortedCarPrices[i][2] + '</p>' + '<div class="serviceLogo">' + logoImageDisplay + '</div>' + '</div>'
+            + '<div class="resultBody">' + '<div class="carImage">' + carImageDisplay + '</div>' + '<div class="carPrice">' + '<p class="price">' + sortedCarPrices[i][0] + '€</p>' + '<p class="breakdown">' + sortedCarPrices[i][6] + '</p>' + '</div>' + '</div>'
+            + '<div class="resultFooter">' + '<div class="tagContainer">' + '<div class="tag">' + sortedCarPrices[i][4] + '</div>' + '<div class="tag">' + sortedCarPrices[i][5] + '</div>' + '<div class="packageTag">' + sortedCarPrices[i][3] + '</div>' + '</div>' + '</div>';
+
         const resultContainer = document.getElementById('resultContainer');
         resultContainer.appendChild(resultCard);
     }

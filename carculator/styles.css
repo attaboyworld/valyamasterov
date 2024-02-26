@@ -209,7 +209,7 @@ td {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #04080F;
+    border-bottom: 1px solid #04080F;
     margin-bottom: 24px;
 }
 
