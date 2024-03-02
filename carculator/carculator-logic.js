@@ -19,8 +19,7 @@ loadCarData = () => {
     var waitTime = parseInt(document.getElementById("totalWait").innerHTML);
     var totalNightWaitTime = parseInt(document.getElementById("totalWaitNight").innerHTML);
 
-    // this is used to remove duplicates later on
-    var cityBeeCarsSaved = [];
+    var cityBeeCarsSaved = []; // this is used to remove duplicates for CityBee later on
 
     carData.forEach(element => {
 
@@ -33,36 +32,87 @@ loadCarData = () => {
         var min1 = parseFloat(element.Min1);
         var km1 = parseFloat(element.Km1);
         var h1 = parseFloat(element.H1);
-        var h2 = parseFloat(element.H2);
         var h3 = parseFloat(element.H3);
         var day1 = parseFloat(element.Day1);
         var day2 = parseFloat(element.Day2);
         var day3 = parseFloat(element.Day3);
         var day7 = parseFloat(element.Day7);
         var day7 = parseFloat(element.Day14);
-        var day30 = parseFloat(element.Day30);
-        var dailyKmIncludedWeekdays = parseFloat(element.DailyKmIncludedWeekdays);
-        var dailyKmIncludedFrSun = parseFloat(element.DailyKmIncludedFrSun);
-        var kmIncludedInTarif = parseFloat(element.KmIncludedInTarif);
-        var additionalMin = parseFloat(element.AdditionalMin);
-        var additionalKm = parseFloat(element.Additionalkm);
-        var waitTime1MinDayTime = parseFloat(element.WaitTime1MinDayTime);
-        var pricePerKmDayTime = parseFloat(element.PricePerKmDayTime);
-        var pricePerKmNightTime = parseFloat(element.PricePerKmNightTime);
-        var waitTime1MinNightTime = parseFloat(element.WaitTime1MinNightTime);
         var minimumTripPrice = parseFloat(element.MinimumTripPrice);
         var tripStartFee = parseFloat(element.TripStartFee);
 
+        // Fixing missing wrong car model names for Teslas
         if (company === "OXDrive" || company === "Beast") {
             if (carModel !== "Tesla Model 3 Standard Range +") {
                 carModel = "Tesla " + carModel;
             }
         }
 
+        // Fiqsy Calculations
+        if (company === "Fiqsy") {
+            var totalTime = time + waitTime;
+            minimumTripPrice = 2.50;
+
+            // Renault Zoe
+            var calcBreakDown = ""; tariffName = "Hour Package"; min1 = 0.28; h1 = 9.70; day1 = 47;
+
+            if ((day1 * 60) / h1 <= totalTime && day1 < h3 + h1 * 2 + (totalTime - 300) * min1) {
+                ridePrice = h1 * 5;
+                calcBreakDown = "Day Package (" + day1 + "€)";
+                if (distance > 100) {
+                    ridePrice += 0.16 * (distance - 100);
+                    calcBreakDown += " + Extra km (100km included in package) (0.16€ * " + distance-100 + "km)";
+                } 
+            } else if ((h1 * 5) / min1 <= totalTime && h1 * 5 < h1 * 4 + (totalTime - 300) * min1) {
+                ridePrice = h1 * 5;
+                calcBreakDown = "1 Hour Package (" + h1 + "€) * 5";
+                if (totalTime > 300) {
+                    ridePrice += min1 * (totalTime - 300);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 300) + "min)";
+                }
+            } else if ((h1 * 4) / min1 <= totalTime && h1 * 4 < h1 * 3 + (totalTime - 240) * min1) {
+                ridePrice = h1 * 4;
+                calcBreakDown = "1 Hour Package (" + h1 + "€) * 4";
+                if (totalTime > 240) {
+                    ridePrice += min1 * (totalTime - 240);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 240) + "min)";
+                }
+            } else if ((h1 * 3) / min1 <= totalTime && h1 * 3 < h1 * 2 + (totalTime - 180) * min1) {
+                ridePrice = h1 * 3;
+                calcBreakDown = "1 Hour Package (" + h1 + "€) * 3";
+                if (totalTime > 180) {
+                    ridePrice += min1 * (totalTime - 180);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 180) + "min)";
+                }
+            } else if ((h1 * 2) / min1 <= totalTime && h1 * 2 < h1 + (totalTime - 60) * min1) {
+                ridePrice = h1 * 2;
+                calcBreakDown = "1 Hour Package (" + h1 + "€) * 2";
+                if (totalTime > 120) {
+                    ridePrice += min1 * (totalTime - 120);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 120) + "min)";
+                }
+            } else if (h1 / min1 <= totalTime) {
+                ridePrice = h1;
+                calcBreakDown = "1 Hour Package (" + h1 + "€)";
+                if (totalTime > 60) {
+                    ridePrice += min1 * (totalTime - 60);
+                    calcBreakDown += " + (" + min1 + "€ * " + (totalTime - 60) + "min)";
+                }
+            } else {
+                ridePrice = (totalTime * min1);
+                calcBreakDown = "(" + totalTime + "min" + " * " + min1 + "€)";
+                tariffName = "Pay As You Go";
+            }
+            if (ridePrice < minimumTripPrice) {
+                ridePrice = minimumTripPrice;
+                calcBreakDown = "Minimum trip price: " + minimumTripPrice + "€";
+            }
+            calculatedPrices.push([ridePrice.toFixed(2), company, "Renault Zoe", tariffName, "Hatchback", "Electric", calcBreakDown]);
+        
+        }
+
         // Citybee Calculations
-
         if (company === "Citybee" && carModel !== "Toyota Yaris Cross" && carModel !== "VW T-Roc" && carModel !== "Toyota Rav4" && carModel !== "Hyundai i20" && carModel !== "Renault Clio" && carModel !== "Skoda Fabia" && carModel !== "Toyota Yaris" && carModel !== "Renault Captur" && carModel !== "Renault Captur" && carModel !== "Toyota Corolla Crossover" && carModel !== "VW Tiguan Diesel" && carModel !== "Nissan Juke" && carModel !== "MAN TGE") {
-
             // Citybee hardcoded prices
             if (carModel === "VW T-Cross" || carModel === "Seat Ateca" || carModel === "Opel Crossland" || carModel === "VW Taigo" || carModel === "Toyota C-HR" || carModel === "Opel Mokka" || carModel === "Ford Focus Wagon" || carModel === "Ford Puma" || carModel === "Peugeot 308" || carModel === "Ford Focus" || carModel === "Toyota Corolla" || carModel === "Toyota Corolla Touring" || carModel === "Renault Arkana" || carModel === "Skoda Kamiq") {
                 min1 = 0.12; h1 = 4.99; day1 = 19.99; km1 = 0.26;
@@ -379,24 +429,6 @@ loadCarData = () => {
             }
             calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
         }
-
-        // Beast Price Calculations
-        if (company === "Beast" && tariffName !== "Beast+") {
-
-            // wait time and drive time price is identical, day/night time doesnt affect the price, combining it into single variable
-            var totalTime = time + waitTime;
-            var calcBreakDown = "";
-
-            if (day1 / min1 <= totalTime) {
-                ridePrice = tripStartFee + day1;
-                calcBreakDown = "Trip Start Fee (" + tripStartFee + "€) + 1 Day (" + day1 + "€)";
-            } else {
-                ridePrice = tripStartFee + (totalTime * min1);
-                calcBreakDown = "Trip Start Fee (" + tripStartFee + "€) + (" + totalTime.toFixed(0) + "min" + " * " + min1 + "€)";
-            }
-            calculatedPrices.push([ridePrice.toFixed(2), company, carModel, tariffName, carType, fuelType, calcBreakDown]);
-        }
-
     });
 
     sortedCarPrices = calculatedPrices.sort((a, b) => a[0] - b[0]);
@@ -461,6 +493,7 @@ loadCarData = () => {
             case "VW Tiguan": carImageDisplay = "<img src=" + "images/cars/vw-tiguan.png" + ">"; break;
             case "Renault Master": carImageDisplay = "<img src=" + "images/cars/renault-master.png" + ">"; break;
             case "Ford Transit": carImageDisplay = "<img src=" + "images/cars/ford-transit.png" + ">"; break;
+            case "Renault Zoe": carImageDisplay = "<img src=" + "images/cars/renault-zoe.png" + ">"; break;
         }
 
         switch (sortedCarPrices[i][1]) {
@@ -468,8 +501,7 @@ loadCarData = () => {
             case "Citybee": logoImageDisplay = "<img src=" + "images/logos/citybee-logo.png" + ">"; break;
             case "Bolt Drive": logoImageDisplay = "<img src=" + "images/logos/bolt-logo.png" + ">"; break;
             case "OXDrive": logoImageDisplay = "<img src=" + "images/logos/oxdrive-logo.png" + ">"; break;
-            case "Beast": logoImageDisplay = "<img src=" + "images/logos/beast-logo.png" + ">"; break;
-
+            case "Fiqsy": logoImageDisplay = "<img src=" + "images/logos/fiqsy-logo.png" + ">"; break;
         }
 
 
